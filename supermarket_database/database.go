@@ -1,5 +1,7 @@
 package supermarket_database
 
+import "github.com/pkg/errors"
+
 var database = []ProduceItem{}
 
 //var database = map[string]ProduceItem{}
@@ -38,17 +40,25 @@ func ListProduceItems() []ProduceItem {
 	return database
 }
 
-func AddProduceItem(item ProduceItem) {
-
+//All produce items are assumed that they will enter via the api, thus validation will occur at the api layer
+func AddProduceItemToDatabase(item ProduceItem) {
+	if err := ValidateUUID(item.ProduceCode); err == nil{
+		database = append(database, item)
+	}
 }
 
-func RemoveProduceItem() {
+func RemoveProduceItemToDatabase() {
 }
 
-/*Checks to see if the Produce code actually exists,
-if yes then return a nil error
-else return a message
+/*Checks to see if the Produce code already exists,
+if yes, then returns a message
+else returns a nil error
 */
-func ValidateUUID(id string) error {
+func ValidateUUID(produceCode string) error {
+	for _, element := range database{
+		if element.ProduceCode == produceCode{
+			return errors.New("Produce with this Code already exists")
+		}
+	}
 	return nil
 }
