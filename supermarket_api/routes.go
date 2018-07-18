@@ -2,7 +2,7 @@ package supermarket_api
 
 import (
 	"net/http"
-	"SupermarketAPI/src/supermarket-service"
+	"SupermarketAPI/supermarket_service"
 )
 
 // struct of required fields for mux router

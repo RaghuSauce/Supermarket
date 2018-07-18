@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
-	"SupermarketAPI/src/supermarket-api"
+	"SupermarketAPI/supermarket_api"
 )
 
 func main() {
