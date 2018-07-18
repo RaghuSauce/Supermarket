@@ -1,12 +1,12 @@
 package supermarket_database
 
-//var database = []ProduceItem{}
+var database = []ProduceItem{}
 
-var database = map[string]ProduceItem{}
+//var database = map[string]ProduceItem{}
 
 func init() {
 	//Array representing the initial state of the database
-	var initDatabase = []ProduceItem{
+	database = []ProduceItem{
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL9-3N4M",
 			Name:        "Lettuce",
@@ -28,13 +28,6 @@ func init() {
 			UnitPrice:   3.59,
 		},
 	}
-
-	database = make(map[string]ProduceItem) //init the database
-	for _, element := range initDatabase {  //add all the initial structs to the database
-		produceCode := element.ProduceCode
-		database[produceCode] = element
-
-	}
 }
 
 //TODO Implement Concurrency
@@ -42,21 +35,20 @@ func init() {
 
 //Returns the all of the ProduceItems values from the database as a slice
 func ListProduceItems() []ProduceItem {
-	var databaseList = []ProduceItem{}
-	for _, element := range database {
-		databaseList = append(databaseList, element)
-	}
-	return databaseList
+	return database
 }
 
 func AddProduceItem(item ProduceItem) {
+
 }
 
 func RemoveProduceItem() {
 }
 
-
-//TODO actually check the produceCode
-func validateUUID(id string) error {
+/*Checks to see if the Produce code actually exists,
+if yes then return a nil error
+else return a message
+*/
+func ValidateUUID(id string) error {
 	return nil
 }

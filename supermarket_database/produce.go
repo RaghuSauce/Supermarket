@@ -14,11 +14,13 @@ type ProduceItem struct {
 
 //Validates the incoming produce Item,
 // Also Mutates the Produce Code and Name, wasn't sure where to place the side effect :(
+//TODO limit precision on unit price to two decimal plalces
+//TODO add validation for Produce Code
 func ValidateProduceItem(item *ProduceItem) error {
 	item.ProduceCode = strings.ToUpper(item.ProduceCode)
 	item.Name = strings.ToUpper(item.Name)
 
-	if err := validateUUID(item.ProduceCode); err != nil {
+	if err := ValidateUUID(item.ProduceCode); err != nil {
 		return nil
 	}
 	return errors.New("Invalid Produce Item")
