@@ -16,7 +16,7 @@ type Route struct {
 // Array of all routes in application
 type Routes []Route
 
-//TODO add handler functions
+
 var routes = Routes{
 	//Index Greeting page
 	Route{
@@ -31,7 +31,7 @@ var routes = Routes{
 		"Fetch",
 		"GET",
 		"/fetch",
-		nil,
+		supermarket_service.FetchProduceList,
 	},
 
 	//Add a produce Item
@@ -39,7 +39,7 @@ var routes = Routes{
 		"Add",
 		"POST",
 		"/add",
-		nil,
+		supermarket_service.AddProduceItem,
 	},
 
 	//Remove A produce Item
@@ -47,6 +47,6 @@ var routes = Routes{
 		"Remove",
 		"Delete",
 		"/remove",
-		nil,
+		supermarket_service.RemoveProduceItem,
 	},
 }
