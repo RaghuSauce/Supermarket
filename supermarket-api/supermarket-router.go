@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func supermarket_router() *mux.Router {
+func Supermarket_router() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
 		var handler http.Handler

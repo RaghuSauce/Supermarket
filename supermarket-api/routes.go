@@ -1,6 +1,9 @@
 package supermarket_api
 
-import "net/http"
+import (
+	"net/http"
+	"SupermarketAPI/supermarket-service"
+)
 
 // struct of required fields for mux router
 type Route struct {
@@ -20,7 +23,7 @@ var routes = Routes{
 		"Index",
 		"GET",
 		"/",
-		nil,
+		supermarket_service.Index,
 	},
 
 	//Get the list of all produce currently available

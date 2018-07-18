@@ -1,21 +1,15 @@
 package main
 
 import (
-	"fmt"
-	"html"
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"SupermarketAPI/supermarket-api"
 )
 
 func main() {
 
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", Index)
+	router := supermarket_api.Supermarket_router()
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
-func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "supermarketApi, %q", html.EscapeString(r.URL.Path))
-}
