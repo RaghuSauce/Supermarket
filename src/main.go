@@ -1,9 +1,9 @@
 package main
 
 import (
-	"SupermarketAPI/supermarket-api"
 	"log"
 	"net/http"
+	"SupermarketAPI/src/supermarket-api"
 )
 
 func main() {
