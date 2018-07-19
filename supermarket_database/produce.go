@@ -12,9 +12,10 @@ type ProduceItem struct {
 }
 
 //Regex for Allowed Values for ProduceItems
+//TODO Implement returning proper status codes
 const (
-	NAMEREGEX        = "^(([A-Za-z])*)(\\s[A-Za-z ]*)?$"
 	PRODUCECODEREGEX = "^(([A-Z 0-9 a-z]){4}-){3}(([A-Z 0-9 a-z]){4})$"
+	NAMEREGEX        = "^(([A-Za-z0-9])*)(\\s[A-Za-z0-9 ]*)?$"
 	UNITPRICEREGEX   = "^[0-9]+(\\.[0-9]{1,2})?$"
 )
 

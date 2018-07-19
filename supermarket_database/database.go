@@ -1,6 +1,9 @@
 package supermarket_database
 
-import "github.com/pkg/errors"
+import (
+	"github.com/pkg/errors"
+	"strings"
+)
 
 var database = []ProduceItem{}
 
@@ -70,7 +73,7 @@ else returns a nil error
 */
 func ValidateUUID(produceCode string) error {
 	for _, element := range database {
-		if element.ProduceCode == produceCode {
+		if strings.ToUpper(element.ProduceCode) == strings.ToUpper(produceCode) {
 			return errors.New("Produce with this Code already exists")
 		}
 	}
