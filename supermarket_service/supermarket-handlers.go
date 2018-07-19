@@ -46,11 +46,15 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 	//TODO Fix input validation
 	//Validate the struct, and Change the case of the case insensitive fields
 	//if err := supermarket_database.ValidateProduceItem(&produce); err == nil {
-	if err := supermarket_database.ValidateUUID(produce.ProduceCode); err == nil {
-		supermarket_database.AddProduceItemToDatabase(produce)
-		fmt.Fprint(w, "Success")
-	} else {
-		fmt.Fprint(w, err)
+	if isValid ,err := supermarket_database.ValidateProduceItem(produce); (err == nil && isValid ){
+		if err = supermarket_database.AddProduceItemToDatabase(produce); err == nil{
+			fmt.Fprint(w, "Success")
+		}else {
+
+			fmt.Fprint(w,err)
+		}
+	}else {
+		fmt.Fprint(w,"Invalid Entry For Produce")
 	}
 
 }
