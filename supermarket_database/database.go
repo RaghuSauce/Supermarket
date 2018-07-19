@@ -41,13 +41,27 @@ func ListProduceItems() []ProduceItem {
 }
 
 //All produce items are assumed that they will enter via the api, thus validation will occur at the api layer
-func AddProduceItemToDatabase(item ProduceItem) {
-	if err := ValidateUUID(item.ProduceCode); err == nil{
+func AddProduceItemToDatabase(item ProduceItem) error{
+	if err := ValidateUUID(item.ProduceCode); err == nil {
 		database = append(database, item)
+		return nil
 	}
+	return errors.New("Error Adding Produce Item to the Database")
 }
 
-func RemoveProduceItemToDatabase() {
+func RemoveProduceItemFromDatabase(produceCode string)  error{
+	if err := ValidateUUID(produceCode); err != nil {
+		newDatabase := []ProduceItem{}
+		for _, element := range database {
+			if element.ProduceCode != produceCode { //if the produce codes are equal
+				// a = append(a[:i], a[i+1:]...)	some research unveiled this, might be more performant but I don't fully understand it yet
+				newDatabase = append(newDatabase, element)
+			}
+		}
+		database = newDatabase
+		return nil
+	}
+	return errors.New("Error Removing Produce Item from the Database")
 }
 
 /*Checks to see if the Produce code already exists,
@@ -55,8 +69,8 @@ if yes, then returns a message
 else returns a nil error
 */
 func ValidateUUID(produceCode string) error {
-	for _, element := range database{
-		if element.ProduceCode == produceCode{
+	for _, element := range database {
+		if element.ProduceCode == produceCode {
 			return errors.New("Produce with this Code already exists")
 		}
 	}

@@ -4,13 +4,14 @@ import (
 	"SupermarketAPI/supermarket_database"
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"html"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
-//TODO Implement Handler Stubs
 
 //Get Mapping	"/"
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -35,7 +36,7 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 	}
 	if json.Unmarshal(body, &produce); err != nil { //Unmarshal the request into the struct, panic if an error occurs
 		w.Header().Set("Content-Type", "application/json ; charset=UTF-8") //Set the response type
-		w.WriteHeader(422)	//Set the response Code
+		w.WriteHeader(422)                                                 //Set the response Code
 
 		if err := json.NewEncoder(w).Encode(err); err != nil {
 			panic(err)
@@ -45,9 +46,9 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 	//TODO Fix input validation
 	//Validate the struct, and Change the case of the case insensitive fields
 	//if err := supermarket_database.ValidateProduceItem(&produce); err == nil {
-	if err:= supermarket_database.ValidateUUID(produce.ProduceCode); err==nil {
+	if err := supermarket_database.ValidateUUID(produce.ProduceCode); err == nil {
 		supermarket_database.AddProduceItemToDatabase(produce)
-		fmt.Fprint(w,"Success")
+		fmt.Fprint(w, "Success")
 	} else {
 		fmt.Fprint(w, err)
 	}
@@ -56,5 +57,17 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 
 //Delete Mapping	"/remove"
 func RemoveProduceItem(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Remove, %q", html.EscapeString(r.URL.Path))
+	produceCode := getProduceCodeUrlParamter(r)
+	 if err := supermarket_database.RemoveProduceItemFromDatabase(produceCode); err != nil{
+	 	fmt.Fprint(w,err)
+	 }else {
+		 fmt.Fprint(w,"sucess")
+	 }
+
+}
+
+func getProduceCodeUrlParamter(r *http.Request) string {
+	vars := mux.Vars(r) //Get url variables
+	code := strings.Split(vars["Parameter%20Code"], "=")
+	return code[1]
 }
