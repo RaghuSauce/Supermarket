@@ -1,17 +1,11 @@
-FROM golang:1.8
+FROM scratch
+ADD main /
+CMD ["/maind"]
 
-WORKDIR /go/src/app
-COPY . .
+#script used to build statically linked bin
+#CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
-RUN go get -d -v ./...
-RUN go install -v ./...
-
-CMD ["app"]
-
-
-#https://hub.docker.com/_/golang/
-#You can then build and run the Docker image:
-#
-#$ docker build -t my-golang-app .
-#$ docker run -it --rm --name my-running-app my-golang-app
-
+#Using a scratch container allows the images to be much much smaller
+#got the idea from watching a talk on kubernties by Kelsey Hightower
+#super funny and informative
+#https://www.youtube.com/watch?v=XPC-hFL-4lU
