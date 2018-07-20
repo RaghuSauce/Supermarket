@@ -37,17 +37,9 @@ func init() {
 }
 
 //Returns the all of the ProduceItems values from the database as a slice
-func ListProduceItems() []ProduceItem {
-	var db []ProduceItem
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		db = database
-	}()
-	wg.Wait()
-	return db
+func ListProduceItems(c chan  []ProduceItem) {
+	c <- database
+	close(c)
 }
 
 //All produce items are assumed that they will enter via the api, thus validation will occur at the api layer
@@ -58,7 +50,11 @@ func AddProduceItemToDatabase(item ProduceItem) error {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if e := validateUUID(item.ProduceCode); e == nil {
+
+		c := make(chan error)
+		go validateUUID(item.ProduceCode,c)
+
+		if e := <- c ; e == nil {
 			database = append(database, item)
 			err = nil
 		} else {
@@ -77,7 +73,9 @@ func RemoveProduceItemFromDatabase(produceCode string) error {
 
 	go func() {
 		defer wg.Done()
-		if e := validateUUID(produceCode); e != nil {
+		c :=  make(chan error)
+		go validateUUID(produceCode, c)
+		if e := <- c; e != nil {
 			newDatabase := []ProduceItem{}
 			for _, element := range database {
 				if element.ProduceCode != produceCode { //if the produce codes are equal
@@ -99,14 +97,18 @@ func RemoveProduceItemFromDatabase(produceCode string) error {
 /*Checks to see if the Produce code already exists,
 if yes, then returns a message
 else returns a nil error
-
-does not need to be synced bc it it is always called from a synced routine
 */
-func validateUUID(produceCode string) error {
+func validateUUID(produceCode string, err chan error)  {
+	var e error
 	for _, element := range database {
 		if strings.ToUpper(element.ProduceCode) == strings.ToUpper(produceCode) {
-			return errors.New("Produce with this Code already exists")
+			e = errors.New("Produce with this Code already exists")
+		}else{
+			//fmt.Println("Else Case")
+			//fmt.Println(element.ProduceCode,":",produceCode)
+			e = nil
 		}
 	}
-	return nil
+	err <- e
+	close(err)
 }

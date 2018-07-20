@@ -20,7 +20,10 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 //Get Mapping  "/fetch "
 func FetchProduceList(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(supermarket_database.ListProduceItems())
+	c := make(chan []supermarket_database.ProduceItem)
+	go supermarket_database.ListProduceItems(c)
+	db := <- c
+	json.NewEncoder(w).Encode(db)
 }
 
 //Post Mapping	"/add"
