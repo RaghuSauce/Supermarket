@@ -3,6 +3,7 @@ package supermarket_database
 import (
 	"github.com/pkg/errors"
 	"strings"
+	"sync"
 )
 
 var database = []ProduceItem{}
@@ -15,7 +16,7 @@ func init() {
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL9-3N4M",
 			Name:        "Lettuce",
-			UnitPrice:  "3.46",
+			UnitPrice:   "3.46",
 		},
 		ProduceItem{
 			ProduceCode: "E5T6-9UI3-TH15-QR88",
@@ -37,22 +38,31 @@ func init() {
 
 //TODO Implement Concurrency
 
-
 //Returns the all of the ProduceItems values from the database as a slice
 func ListProduceItems() []ProduceItem {
 	return database
 }
 
 //All produce items are assumed that they will enter via the api, thus validation will occur at the api layer
-func AddProduceItemToDatabase(item ProduceItem) error{
-	if err := ValidateUUID(item.ProduceCode); err == nil {
-		database = append(database, item)
-		return nil
-	}
-	return errors.New("Error Adding Produce Item to the Database")
+func AddProduceItemToDatabase(item ProduceItem) error {
+	var err error // init error for goroutine to set
+	var wg  sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		if e := ValidateUUID(item.ProduceCode); e == nil {
+			database = append(database, item)
+			err = nil
+		}else {
+			err = errors.New("Error Adding Produce Item to the Database")
+		}
+	}()
+	wg.Wait()
+	return err
 }
 
-func RemoveProduceItemFromDatabase(produceCode string)  error{
+func RemoveProduceItemFromDatabase(produceCode string) error {
 	if err := ValidateUUID(produceCode); err != nil {
 		newDatabase := []ProduceItem{}
 		for _, element := range database {
