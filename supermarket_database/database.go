@@ -6,10 +6,12 @@ import (
 	"sync"
 )
 
+// array of produce item that is acting as our database
 var database = []ProduceItem{}
 
-//var database = map[string]ProduceItem{}
+//var database = map[string]ProduceItem{}	//I think that using a map should drastically improve performance but the spec specified using an array
 
+//init function to set the starting state of the database
 func init() {
 	//Array representing the initial state of the database
 	database = []ProduceItem{
@@ -36,74 +38,75 @@ func init() {
 	}
 }
 
-//Returns the all of the ProduceItems values from the database as a slice
-func ListProduceItems(c chan  []ProduceItem) {
+//Sends the current database slice via channel to caller
+func ListProduceItems(c chan []ProduceItem) {
 	c <- database
 	close(c)
 }
 
 //All produce items are assumed that they will enter via the api, thus validation will occur at the api layer
+//Adds a produce item to the database if its Produce Code is valid
 func AddProduceItemToDatabase(item ProduceItem) error {
-	var err error // init error for goroutine to set
-	var wg sync.WaitGroup
+	var err error         // init error for goroutine to set
+	var wg sync.WaitGroup //wait group for anon async func
 
-	wg.Add(1)
+	wg.Add(1) //wait for func to end
 	go func() {
-		defer wg.Done()
+		defer wg.Done() //decrement wait counter at end of goroutine
 
-		c := make(chan error)
-		go validateUUID(item.ProduceCode,c)
+		c := make(chan error)                //receive error from async call from uuid check
+		go validateUUID(item.ProduceCode, c) //check if produce code is valid
 
-		if e := <- c ; e == nil {
+		if e := <-c; e == nil { // if the error from validateUUID is nil append item to the database
 			database = append(database, item)
-			err = nil
-		} else {
+			err = nil //bc we were able to append to the database set the set error to null
+		} else { //if the ProduceCode from item matched an existing item then set a non nil error
 			err = errors.New("Error Adding Produce Item to the Database")
 		}
 	}()
-	wg.Wait()
-	return err
+	wg.Wait()  // wait for async add to finish
+	return err //return error set by go routine
 }
 
 func RemoveProduceItemFromDatabase(produceCode string) error {
-	var err error //initial error for the go routine to modify
-	var wg sync.WaitGroup
+	var err error         //initial error for the go routine to modify
+	var wg sync.WaitGroup //wait group for anon async func
 
-	wg.Add(1)
+	wg.Add(1) //add wait to counter for go routine
 
 	go func() {
-		defer wg.Done()
-		c :=  make(chan error)
-		go validateUUID(produceCode, c)
-		if e := <- c; e != nil {
-			newDatabase := []ProduceItem{}
-			for _, element := range database {
+		defer wg.Done()                 //decrement from wait counter when routine is finished
+		c := make(chan error)           //make a channel to receive an error from uuid validation
+		go validateUUID(produceCode, c) //validate produceCode
+		if e := <-c; e != nil {         //if the error is NOT nil i.e. the item exists within the database then remove it
+			newDatabase := []ProduceItem{}     //new slice
+			for _, element := range database { //iterate over existing db and add all but selected code
 				if element.ProduceCode != produceCode { //if the produce codes are equal
 					// a = append(a[:i], a[i+1:]...)	some research unveiled this, might be more performant but I don't fully understand it yet
-					newDatabase = append(newDatabase, element)
+					newDatabase = append(newDatabase, element) //append element to new db
 				}
 			}
-			database = newDatabase
-			err = nil
-		} else {
-			err = errors.New("Error Removing Produce Item from the Database")
+			database = newDatabase //set db equal to new db
+			err = nil              // bc remove operation was a success set the error to nil
+		} else { //else produce code does not exist within the db
+			err = errors.New("Error Removing Produce Item from the Database") //set error message for return
 		}
 	}()
 
-	wg.Wait()
-	return err
+	wg.Wait()  //wait for routine to finish
+	return err //return what the routine set the  error as
 }
 
 /*Checks to see if the Produce code already exists,
 if yes, then returns a message
 else returns a nil error
 */
-func validateUUID(produceCode string, err chan error)  {
+func validateUUID(produceCode string, err chan error) {
 	var e error
 	for _, element := range database {
 		if strings.ToUpper(element.ProduceCode) == strings.ToUpper(produceCode) {
 			e = errors.New("Produce with this Code already exists")
-		}else{
+		} else {
 			//fmt.Println("Else Case")
 			//fmt.Println(element.ProduceCode,":",produceCode)
 			e = nil

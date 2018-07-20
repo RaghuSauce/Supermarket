@@ -6,8 +6,8 @@ import (
 
 //struct representing one Item of produce in the supermarket
 type ProduceItem struct {
-	ProduceCode string  `json:"producecode"`
-	Name        string  `json:"name"`
+	ProduceCode string `json:"producecode"`
+	Name        string `json:"name"`
 	UnitPrice   string `json:"unitprice"`
 }
 

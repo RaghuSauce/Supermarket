@@ -54,6 +54,7 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 		}
 	}else {
 		fmt.Fprint(w,"Invalid Entry For Produce")
+		//fmt.Fprint(w, err)
 	}
 
 }
