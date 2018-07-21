@@ -13,10 +13,15 @@ pipeline {
                 }
             }
         }
+        stage ('install depencies'){
+            steps{
+                sh 'go get'
+                sh 'go install'
+            }
+        }
         stage('Build') {
             steps {
-                sh 'ls -al'
-                sh 'env | grep GO'
+                
             }
         }
     }
