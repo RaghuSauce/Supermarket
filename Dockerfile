@@ -1,6 +1,6 @@
 FROM scratch
 ADD main /
-CMD ["/maind"]
+CMD ["/main"]
 
 #script used to build statically linked bin
 #CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
