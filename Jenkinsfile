@@ -2,7 +2,7 @@
 // https://medium.com/@zarkopafilis/building-a-ci-system-for-go-with-jenkins-4ab04d4bacd0
 node{
     try{
-        notifyBuild('Started')
+     
         withEnv ([ "GOPATH=${env.WORKSPACE}" ])  {
             stage('Check Environment') {
                 //For debugging purposes (Check go version and path to working directory)
