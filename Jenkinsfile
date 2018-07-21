@@ -41,19 +41,20 @@ pipeline {
     }
 
     stages {
-        stage('checkout'){
-            steps{
-                dir('src/SupermarketAPI'){
+        stage('checkout') {
+            steps {
+                dir('src/SupermarketAPI') {
                     checkout scm
                     sh 'go env'
                 }
             }
         }
-        stage ('install depencies'){
-            dir('src/SupermarketAPI')'
-            steps{
-                sh 'go get'
-                sh 'go install'
+        stage('install depencies') {
+            dir('src/SupermarketAPI') {
+                steps {
+                    sh 'go get'
+                    sh 'go install'
+                }
             }
         }
     }
