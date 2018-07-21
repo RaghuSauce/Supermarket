@@ -11,8 +11,12 @@ node{
             }
         }
 
-    stage('build'){
+    stage('checkout'){
         checkout scm
+    }
+    stage("install dependencies"){
+        sh 'go get'
+        sh 'go install'
     }
     }catch (e) {
         //do something
