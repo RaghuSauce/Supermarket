@@ -7,9 +7,8 @@ pipeline {
 
     stages {
         stage('checkout') {
-            dir('src/SupermarketAPI') {
-                steps {
-
+            steps {
+                dir('src/SupermarketAPI') {
                     checkout scm
                     sh 'go env'
 
