@@ -1,27 +1,46 @@
-pipeline {
-    agent any
-
-    environment {
-        GOPATH = "${env.WORKSPACE}"
-    }
-
-    stages {
-        stage('checkout'){
-            steps{
-                dir('src/SupermarketAPI'){
-                    checkout scm
-                    sh 'go env'
-                }
-            }
-        }
-        stage ('install depencies'){
-            steps{
-                sh 'go get'
-                sh 'go install'
-            }
+// new build style base on this blog
+// https://medium.com/@zarkopafilis/building-a-ci-system-for-go-with-jenkins-4ab04d4bacd0
+node{
+    try{
+        notifyBuild('Started')
+        withEnv ([ "GOPATH=${env.WORKSPACE}" ])  {
+        stage('Check Environment') {
+              //For debugging purposes (Check go version and path to working directory)
+              sh 'go version'
+              sh 'pwd'
         }
     }
 }
+
+
+
+
+
+
+// pipeline {
+//     agent any
+
+//     environment {
+//         GOPATH = "${env.WORKSPACE}"
+//     }
+
+//     stages {
+//         stage('checkout'){
+//             steps{
+//                 dir('src/SupermarketAPI'){
+//                     checkout scm
+//                     sh 'go env'
+//                 }
+//             }
+//         }
+//         stage ('install depencies'){
+//             steps{
+//                 sh 'go get'
+//                 sh 'go install'
+//             }
+//         }
+//     }
+// }
 
 // pipeline{
 //     agent  any
