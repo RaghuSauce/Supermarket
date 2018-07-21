@@ -19,8 +19,13 @@ pipeline {
                 dir('src/SupermarketAPI') {
                     sh 'go get'
                     sh 'go install'
-                    sh 'go run main.go'
-                    
+                }
+            }
+        }
+        stage('Build static bin'){
+            steps{
+                dir('src/SupermarketAPI') {
+                    sh './build.sh'
                 }
             }
         }
