@@ -1,35 +1,3 @@
-// new build style base on this blog
-// https://medium.com/@zarkopafilis/building-a-ci-system-for-go-with-jenkins-4ab04d4bacd0
-// node {
-//     try {
-//         withEnv(["GOPATH=${env.WORKSPACE}"]) {
-//             stage('Check Environment') {
-//                 //For debugging purposes (Check go version and path to working directory)
-//                 sh 'go version'
-//                 sh 'pwd'
-//             }
-
-//             stage('checkout') {
-//                 dir('src/SupermarketAPI') {
-//                     checkout scm
-//                     sh 'go env'
-//                 }
-//             }
-
-//             stage("install dependencies") {
-//                 dir('src/SupermarketAPI') {
-//                     sh 'go get'
-//                     sh 'go install'
-//                 }
-//             }
-//         }
-//     } catch (e) {
-//         //do something
-//     }
-// }
-
-
-
 pipeline {
     agent any
 
@@ -56,7 +24,7 @@ pipeline {
             }
         }
     }
-
+}
     // pipeline{
     //     agent  any
 
