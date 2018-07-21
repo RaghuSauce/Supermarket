@@ -19,11 +19,6 @@ pipeline {
                 sh 'go install'
             }
         }
-        stage('Build') {
-            steps {
-                
-            }
-        }
     }
 }
 
