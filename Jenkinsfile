@@ -36,45 +36,46 @@ pipeline {
                 }
             }
         }
-        stage('temp run'){
-            steps{
+        stage('temp run') {
+            steps {
                 sh 'docker run -d -p 8081:8081 supermarket_api:latest'
             }
         }
     }
-    // pipeline{
-    //     agent  any
+}
+// pipeline{
+//     agent  any
 
-    //     enviroment {
-    //         GOPATH=''
-    //     }
-    //     stages{
-    //         state ("prep workspace"){
-    //             steps{
-    //                 dir('src'){
-    //                 }
-    //             }
-    //         }
-    //         stage("pull"){
-    //             steps{
-    //                 sh "git pull https://github.com/RaghuSauce/SupermarketAPI.git"
-    //             }
-    //         stage("build staic bin"){
-    //             steps{
-    //                 sh "./build.sh"
-    //             }
-    //         }
-    //         stage("build docker image"){
-    //             steps{
-    //                 sh "docker build -t supermarket_api:latest ."
-    //             }
-    //         }
-    //         stage("run docker image"){
-    //             steps{
-    //                 sh "docker run -p 8081:8080 -d supermarket_api:latest"
-    //             }
-    //         }
+//     enviroment {
+//         GOPATH=''
+//     }
+//     stages{
+//         state ("prep workspace"){
+//             steps{
+//                 dir('src'){
+//                 }
+//             }
+//         }
+//         stage("pull"){
+//             steps{
+//                 sh "git pull https://github.com/RaghuSauce/SupermarketAPI.git"
+//             }
+//         stage("build staic bin"){
+//             steps{
+//                 sh "./build.sh"
+//             }
+//         }
+//         stage("build docker image"){
+//             steps{
+//                 sh "docker build -t supermarket_api:latest ."
+//             }
+//         }
+//         stage("run docker image"){
+//             steps{
+//                 sh "docker run -p 8081:8080 -d supermarket_api:latest"
+//             }
+//         }
 
-    //         }
-    //     }
-    // }
+//         }
+//     }
+// }
