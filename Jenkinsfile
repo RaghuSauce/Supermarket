@@ -50,8 +50,8 @@ pipeline {
             }
         }
         stage('install depencies') {
-            dir('src/SupermarketAPI') {
-                steps {
+             steps{
+                 dir('src/SupermarketAPI'){
                     sh 'go get'
                     sh 'go install'
                 }
