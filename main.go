@@ -1,15 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"SupermarketAPI/supermarket_api"
+	"fmt"
 	"log"
 	"net/http"
 )
 
 func main() {
 	var ver float32 = 0.00
-	fmt.Println("ver",ver)
+	fmt.Println("ver", ver)
 	router := supermarket_api.Supermarket_router()
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8081", router))
 }
