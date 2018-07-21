@@ -4,12 +4,14 @@ node{
     try{
         notifyBuild('Started')
         withEnv ([ "GOPATH=${env.WORKSPACE}" ])  {
-        stage('Check Environment') {
-              //For debugging purposes (Check go version and path to working directory)
-              sh 'go version'
-              sh 'pwd'
+            stage('Check Environment') {
+                //For debugging purposes (Check go version and path to working directory)
+                sh 'go version'
+                sh 'pwd'
+            }
         }
-    }
+    }catch (e) {
+        //do something
     }
 }
 
