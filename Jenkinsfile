@@ -10,6 +10,7 @@ pipeline {
             steps{
                 dir('src/SupermarketAPI'){
                     checkout scm
+                    sh 'go env'
                 }
             }
         }
