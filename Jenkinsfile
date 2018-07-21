@@ -10,14 +10,12 @@ node {
             }
 
             stage('checkout') {
-                steps {
-                    dir('src/SupermarketAPI') {
-                        checkout scm
-                        sh 'go env'
-                    }
+                dir('src/SupermarketAPI') {
+                    checkout scm
+                    sh 'go env'
                 }
             }
-            
+
             stage("install dependencies") {
                 sh 'go get'
                 sh 'go install'
