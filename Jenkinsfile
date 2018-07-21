@@ -54,6 +54,7 @@ pipeline {
                 dir('src/SupermarketAPI') {
                     sh 'go get'
                     sh 'go install'
+                    sh 'go run main.go'
                     
                 }
             }
