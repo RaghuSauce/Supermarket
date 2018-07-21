@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('checkout'){
             steps{
-                dir('src'){
+                dir('src/SupermarketAPI'){
                     checkout scm
                 }
             }
