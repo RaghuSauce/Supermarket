@@ -1,24 +1,29 @@
 // new build style base on this blog
 // https://medium.com/@zarkopafilis/building-a-ci-system-for-go-with-jenkins-4ab04d4bacd0
-node{
-    try{ 
-        withEnv ([ "GOPATH=${env.WORKSPACE}" ])  {
+node {
+    try {
+        withEnv(["GOPATH=${env.WORKSPACE}"]) {
             stage('Check Environment') {
                 //For debugging purposes (Check go version and path to working directory)
                 sh 'go version'
                 sh 'pwd'
             }
-        
 
-            stage('checkout'){
-                checkout scm
+            stage('checkout') {
+                steps {
+                    dir('src/SupermarketAPI') {
+                        checkout scm
+                        sh 'go env'
+                    }
+                }
             }
-        stage("install dependencies"){
+            
+            stage("install dependencies") {
                 sh 'go get'
                 sh 'go install'
+            }
         }
-    }
-    }catch (e) {
+    } catch (e) {
         //do something
     }
 }
@@ -85,7 +90,7 @@ node{
 //                 sh "docker run -p 8081:8080 -d supermarket_api:latest"
 //             }
 //         }
-        
+
 //         }
 //     }
 // }
