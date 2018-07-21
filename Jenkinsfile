@@ -17,8 +17,10 @@ node {
             }
 
             stage("install dependencies") {
-                sh 'go get'
-                sh 'go install'
+                dir('src/SupermarketAPI') {
+                    sh 'go get'
+                    sh 'go install'
+                }
             }
         }
     } catch (e) {
