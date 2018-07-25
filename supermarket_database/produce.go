@@ -2,6 +2,7 @@ package supermarket_database
 
 import (
 	"regexp"
+	"strings"
 )
 
 //struct representing one Item of produce in the supermarket
@@ -19,7 +20,25 @@ const (
 	UNITPRICEREGEX   = "^[0-9]+(\\.[0-9]{1,2})?$"
 )
 
+func AreEqual(a []ProduceItem, b []ProduceItem ) bool{
+	// if the slices are the same size
+	areEqual:= false
+	if len(a) == len(b) {
+		areEqual= true
+		for i, _:= range a{
+			areEqual = areEqual && IsEqual(a[i],b[i])
+		}
+	}
+	return areEqual
+}
+func IsEqual(a ProduceItem, b ProduceItem) bool {
+	return (strings.ToUpper(a.ProduceCode) == strings.ToUpper(b.ProduceCode)) &&
+		(strings.ToUpper(a.Name) == strings.ToUpper(b.Name)) &&
+		(a.UnitPrice == b.UnitPrice)
+}
+
 //Validates the incoming produce Item,
+//TODO return these codes properly to the front response handlers
 func ValidateProduceItem(item ProduceItem) (bool, error) {
 
 	var isValidProduceItem bool                          //bool to represent if the produce Item is valid

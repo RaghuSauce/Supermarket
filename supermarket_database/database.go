@@ -6,14 +6,11 @@ import (
 	"sync"
 )
 
-// array of produce item that is acting as our database
+// array of produce item that is acting as the database
 var database = []ProduceItem{}
-
-//var database = map[string]ProduceItem{}	//I think that using a map should drastically improve performance but the spec specified using an array
 
 //init function to set the starting state of the database
 func init() {
-	//Array representing the initial state of the database
 	database = []ProduceItem{
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL9-3N4M",
@@ -39,7 +36,7 @@ func init() {
 }
 
 //Sends the current database slice via channel to caller
-func ListProduceItems(c chan []ProduceItem) {
+func ListProduceItems(c chan []ProduceItem){
 	c <- database
 	close(c)
 }
@@ -106,12 +103,34 @@ func validateUUID(produceCode string, err chan error) {
 	for _, element := range database {
 		if strings.ToUpper(element.ProduceCode) == strings.ToUpper(produceCode) {
 			e = errors.New("Produce with this Code already exists")
-		} else {
-			//fmt.Println("Else Case")
-			//fmt.Println(element.ProduceCode,":",produceCode)
-			e = nil
 		}
 	}
 	err <- e
 	close(err)
+}
+
+//Method to reset the database to initial state, used for testing
+func resetDB(){
+	database = []ProduceItem{
+		ProduceItem{
+			ProduceCode: "A12T-4GH7-QPL9-3N4M",
+			Name:        "Lettuce",
+			UnitPrice:   "3.46",
+		},
+		ProduceItem{
+			ProduceCode: "E5T6-9UI3-TH15-QR88",
+			Name:        "Peach",
+			UnitPrice:   "2.99",
+		},
+		ProduceItem{
+			ProduceCode: "YRT6-72AS-K736-L4AR",
+			Name:        "Green Pepper",
+			UnitPrice:   "0.79",
+		},
+		ProduceItem{
+			ProduceCode: "TQ4C-VV6T-75ZX-1RMR",
+			Name:        "Gala Apple",
+			UnitPrice:   "3.59",
+		},
+	}
 }
