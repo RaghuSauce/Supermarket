@@ -58,7 +58,7 @@ func AddProduceItemToDatabase(item ProduceItem) error {
 			database = append(database, item)
 			err = nil //bc we were able to append to the database set the set error to null
 		} else { //if the ProduceCode from item matched an existing item then set a non nil error
-			err = errors.New("Error Adding Produce Item to the Database")
+			err = errors.New(e.Error())
 		}
 	}()
 	wg.Wait()  // wait for async add to finish

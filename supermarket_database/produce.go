@@ -1,9 +1,10 @@
 package supermarket_database
 
 import (
+	"github.com/pkg/errors"
 	"regexp"
 	"strings"
-)
+	)
 
 //struct representing one Item of produce in the supermarket
 type ProduceItem struct {
@@ -20,13 +21,13 @@ const (
 	UNITPRICEREGEX   = "^[0-9]+(\\.[0-9]{1,2})?$"
 )
 
-func AreEqual(a []ProduceItem, b []ProduceItem ) bool{
+func AreEqual(a []ProduceItem, b []ProduceItem) bool {
 	// if the slices are the same size
-	areEqual:= false
+	areEqual := false
 	if len(a) == len(b) {
-		areEqual= true
-		for i, _:= range a{
-			areEqual = areEqual && IsEqual(a[i],b[i])
+		areEqual = true
+		for i, _ := range a {
+			areEqual = areEqual && IsEqual(a[i], b[i])
 		}
 	}
 	return areEqual
@@ -37,21 +38,42 @@ func IsEqual(a ProduceItem, b ProduceItem) bool {
 		(a.UnitPrice == b.UnitPrice)
 }
 
+var (
+	INVALID_PRODUCE_CODE_ERROR error = errors.New("Invalid Produce Code")
+	INVALID_PRODUCE_NAME_ERROR error = errors.New("Invalid Produce Name")
+	INVALID_PRICE_ERROR        error = errors.New("Invalid Price")
+)
+
 //Validates the incoming produce Item,
 //TODO return these codes properly to the front response handlers
-func ValidateProduceItem(item ProduceItem) (bool, error) {
+func ValidateProduceItem(item ProduceItem) (bool, []error) {
 
-	var isValidProduceItem bool                          //bool to represent if the produce Item is valid
-	r, err := regexp.Compile(PRODUCECODEREGEX)           // compile The Produce Code Regex
-	isValidProduceItem = r.MatchString(item.ProduceCode) //determine if produce code is valid
+	var isValidProduceItem bool //bool to represent if the produce Item is valid
+	//var errString string
+	r, _ := regexp.Compile(PRODUCECODEREGEX)              // compile The Produce Code Regex
+	isValidProduceCode := r.MatchString(item.ProduceCode) //determine if produce code is valid
 
-	r, err = regexp.Compile(NAMEREGEX)
-	isValidProduceItem = isValidProduceItem && r.MatchString(item.Name) //determine if the produce code and name are valid
+	r, _ = regexp.Compile(NAMEREGEX)
+	isValidName := r.MatchString(item.Name) //determine if the produce code and name are valid
 
-	r, err = regexp.Compile(UNITPRICEREGEX)
+	r, _ = regexp.Compile(UNITPRICEREGEX)
 	//unitPriceString := strconv.FormatFloat(item.UnitPrice, 'f', 32, 64)       //convert the float to string with enough precision
 	//fmt.Println(unitPriceString)
-	isValidProduceItem = isValidProduceItem && r.MatchString(item.UnitPrice) //determine if the price, name and produce code are valid
+	isValidPrice := r.MatchString(item.UnitPrice) //determine if the price, name and produce code are valid
 
-	return isValidProduceItem, err
+	isValidProduceItem = isValidName && isValidPrice && isValidProduceCode
+
+	var errs []error
+	if !isValidProduceCode {
+		if !isValidProduceCode {
+			errs = append(errs, INVALID_PRODUCE_CODE_ERROR)
+		}
+		if !isValidName {
+			errs = append(errs,INVALID_PRODUCE_NAME_ERROR)
+		}
+		if !isValidPrice {
+			errs = append(errs,INVALID_PRICE_ERROR)
+		}
+	}
+	return isValidProduceItem, errs
 }

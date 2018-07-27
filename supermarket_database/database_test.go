@@ -77,6 +77,7 @@ func TestAddProduceItemToDatabase(t *testing.T) {
 	}
 }
 
+
 func TestRemoveProduceItemFromDatabase(t *testing.T) {
-//	TOOD
+	//TODO
 }

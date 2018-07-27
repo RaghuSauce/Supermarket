@@ -46,14 +46,19 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if isValid ,err := supermarket_database.ValidateProduceItem(produce); (err == nil && isValid){
-		if err = supermarket_database.AddProduceItemToDatabase(produce); err == nil{
+
+	if isValid ,errs := supermarket_database.ValidateProduceItem(produce); (err == nil && isValid){
+		if e := supermarket_database.AddProduceItemToDatabase(produce); e == nil{
 			fmt.Fprint(w, "Success")
 		}else {
-			fmt.Fprint(w,err)
+			fmt.Fprint(w,e)
 		}
 	}else {
-		fmt.Fprint(w,"Invalid Entry For Produce")
+		var errorString string
+		for _, err := range errs{
+			errorString += err.Error() + "\n"
+		}
+		fmt.Fprint(w,"Produce Item is invalid for the following reasons \n\n" ,errorString)
 		//fmt.Fprint(w, err)
 	}
 
@@ -65,7 +70,7 @@ func RemoveProduceItem(w http.ResponseWriter, r *http.Request) {
 	 if err := supermarket_database.RemoveProduceItemFromDatabase(produceCode); err != nil{
 	 	fmt.Fprint(w,err)
 	 }else {
-		 fmt.Fprint(w,"sucess")
+		 fmt.Fprint(w,"success")
 	 }
 
 }
