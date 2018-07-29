@@ -1,7 +1,6 @@
 package supermarket_database
 
 import (
-		"reflect"
 	"testing"
 )
 
@@ -190,9 +189,11 @@ func TestAreEqual(t *testing.T) {
 	}
 }
 
-var emptyErrorSet = make([]error,0)
+var emptyErrorSet = make([]error, 0)
+
 //struct to hold test scenarios for ValidateProduceItems
 type produce_ValidateProduceItem_struct struct {
+	TestName    string      //The name of the test case
 	produceItem ProduceItem // the item being validated
 	errs        []error     //the error expected
 	isValid     bool        //the expected result from the test
@@ -201,8 +202,9 @@ type produce_ValidateProduceItem_struct struct {
 
 //tests scenarios for ValidateProduceItem func
 var produce_TestValidateProduceItem_tests = []produce_ValidateProduceItem_struct{
-	//Valid Produce Item
+
 	produce_ValidateProduceItem_struct{
+		"Valid Produce Item",
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL9-3N4N",
 			Name:        "Lettuce",
@@ -211,21 +213,41 @@ var produce_TestValidateProduceItem_tests = []produce_ValidateProduceItem_struct
 		nil,
 		true,
 	},
-	//TODO empty error array causes error with DeepEqual, Add more tests when custom equality test is done
-	////Produce is lowercase
-	//produce_ValidateProduceItem_struct{
-	//	ProduceItem{
-	//		ProduceCode: "a12t-4gh7-qpl9-3n4n",
-	//		Name:        "Lettuce",
-	//		UnitPrice:   "3.46",
-	//	},
-	//	[]error{
-	//
-	//	},
-	//	true,
-	//},
-	//Produce Code is missing digit the the first group
+
 	produce_ValidateProduceItem_struct{
+		"Produce is lowercase",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n4n",
+			Name:        "Lettuce",
+			UnitPrice:   "3.46",
+		},
+		[]error{},
+		true,
+	},
+	produce_ValidateProduceItem_struct{
+		"Produce Is Mixed Case",
+		ProduceItem{
+			ProduceCode: "a12t-4Gh7-Ppl9-3n4n",
+			Name:        "Lettuce",
+			UnitPrice:   "3.46",
+		},
+		[]error{},
+		true,
+	},
+
+	produce_ValidateProduceItem_struct{
+		"Produce is lowercase",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n4n",
+			Name:        "Lettuce",
+			UnitPrice:   "3.46",
+		},
+		[]error{},
+		true,
+	},
+
+	produce_ValidateProduceItem_struct{
+		"Produce Code is missing digit the the first group",
 		ProduceItem{
 			ProduceCode: "A12-4GH7-QPL9-3N4M",
 			Name:        "Lettuce",
@@ -236,8 +258,8 @@ var produce_TestValidateProduceItem_tests = []produce_ValidateProduceItem_struct
 		false,
 	},
 
-	//Produce Item is missing digit from the 2nd group
 	produce_ValidateProduceItem_struct{
+		"Produce Item is missing digit from the 2nd group",
 		ProduceItem{
 			ProduceCode: "A12T-4GH-QPL9-3N4N",
 			Name:        "Lettuce",
@@ -248,9 +270,8 @@ var produce_TestValidateProduceItem_tests = []produce_ValidateProduceItem_struct
 		},
 		false,
 	},
-
-	//Produce Item is missing digit from the 3nd group
 	produce_ValidateProduceItem_struct{
+		"Produce Item is missing digit from the 3nd group",
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL-3N4N",
 			Name:        "Lettuce",
@@ -261,8 +282,8 @@ var produce_TestValidateProduceItem_tests = []produce_ValidateProduceItem_struct
 		},
 		false,
 	},
-	//Produce Item is missing digit from the 4th group
 	produce_ValidateProduceItem_struct{
+		"Produce Item is missing digit from the 4th group",
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL9-3N4",
 			Name:        "Lettuce",
@@ -273,9 +294,8 @@ var produce_TestValidateProduceItem_tests = []produce_ValidateProduceItem_struct
 		},
 		false,
 	},
-
-	//ProduceItems does not fit the expected format
 	produce_ValidateProduceItem_struct{
+		"ProduceItems does not fit the expected format",
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL993N45",
 			Name:        "Lettuce",
@@ -286,26 +306,217 @@ var produce_TestValidateProduceItem_tests = []produce_ValidateProduceItem_struct
 		},
 		false,
 	},
-
+	produce_ValidateProduceItem_struct{
+		"C_ (())",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n4n",
+			Name:        "C_ (())",
+			UnitPrice:   "3.46",
+		},
+		[]error{
+			INVALID_PRODUCE_NAME_ERROR,
+		},
+		false,
+	},
+	produce_ValidateProduceItem_struct{
+		"Empty Name",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n4n",
+			Name:        "",
+			UnitPrice:   "3.46",
+		},
+		[]error{},
+		true,
+	},
+	produce_ValidateProduceItem_struct{
+		"Space Name",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n4n",
+			Name:        " ",
+			UnitPrice:   "3.46",
+		},
+		[]error{},
+		true,
+	},
+	produce_ValidateProduceItem_struct{
+		"Lowercase Name",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n4n",
+			Name:        "lettuce",
+			UnitPrice:   "3.46",
+		},
+		[]error{},
+		true,
+	},
+	produce_ValidateProduceItem_struct{
+		"UpperCase name",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n4n",
+			Name:        "uppercase name",
+			UnitPrice:   "3.46",
+		},
+		[]error{},
+		true,
+	},
+	produce_ValidateProduceItem_struct{
+		"Invalid Produce Code and Invalid Name",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n4",
+			Name:        "(👚)",
+			UnitPrice:   "3.46",
+		},
+		[]error{
+			INVALID_PRODUCE_CODE_ERROR,
+			INVALID_PRODUCE_NAME_ERROR,
+		},
+		false,
+	},
+	produce_ValidateProduceItem_struct{
+		"Valid Price without cents",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n43",
+			Name:        "Shirt",
+			UnitPrice:   "300",
+		},
+		[]error{},
+		true,
+	},
+	produce_ValidateProduceItem_struct{
+		"Valid Price with Precision 1 on cents",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n43",
+			Name:        "Shirt",
+			UnitPrice:   "300.0",
+		},
+		[]error{},
+		true,
+	},
+	produce_ValidateProduceItem_struct{
+		"Valid Price with Precision 2 on cents",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n43",
+			Name:        "Shirt",
+			UnitPrice:   "300.00",
+		},
+		[]error{},
+		true,
+	},
+	produce_ValidateProduceItem_struct{
+		"Invalid Price too many decimal points",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n43",
+			Name:        "Shirt",
+			UnitPrice:   "300.000",
+		},
+		[]error{
+			INVALID_PRICE_ERROR,
+		},
+		false,
+	},
+	produce_ValidateProduceItem_struct{
+		"Empty Price",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n43",
+			Name:        "Shirt",
+			UnitPrice:   "",
+		},
+		[]error{
+			INVALID_PRICE_ERROR,
+		},
+		false,
+	},
+	produce_ValidateProduceItem_struct{
+		"Negative Price",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n43",
+			Name:        "Shirt",
+			UnitPrice:   "-20.00",
+		},
+		[]error{
+			INVALID_PRICE_ERROR,
+		},
+		false,
+	},
+	produce_ValidateProduceItem_struct{
+		"Invalid Produce Code and Invalid UnitPrice",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n4",
+			Name:        "Shirt",
+			UnitPrice:   "300.000",
+		},
+		[]error{
+			INVALID_PRODUCE_CODE_ERROR,
+			INVALID_PRICE_ERROR,
+		},
+		false,
+	},
+	produce_ValidateProduceItem_struct{
+		"Invalid Name and Invalid Price",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n43",
+			Name:        "Shir-",
+			UnitPrice:   "300.000",
+		},
+		[]error{
+			INVALID_PRODUCE_NAME_ERROR,
+			INVALID_PRICE_ERROR,
+		},
+		false,
+	},
+	produce_ValidateProduceItem_struct{
+		"Invalid Price too many decimal points",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n43",
+			Name:        "Shirt",
+			UnitPrice:   "300.000",
+		},
+		[]error{
+			INVALID_PRICE_ERROR,
+		},
+		false,
+	},
+	produce_ValidateProduceItem_struct{
+		"Invalid Produce Code, Invalid Name, Invalid Unit Price",
+		ProduceItem{
+			ProduceCode: "a12t-4gh7-qpl9-3n4",
+			Name:        "(👚)",
+			UnitPrice:   "300.000",
+		},
+		[]error{
+			INVALID_PRODUCE_CODE_ERROR,
+			INVALID_PRODUCE_NAME_ERROR,
+			INVALID_PRICE_ERROR,
+		},
+		false,
+	},
 }
 
 //function to test validation of produce items
-//TODO Replace DeepEqual with custom equality check
 func TestValidateProduceItem(t *testing.T) {
 	var errs []error
 	var isValid bool
 
 	for _, element := range produce_TestValidateProduceItem_tests {
 		isValid, errs = ValidateProduceItem(element.produceItem)
-		if !isValid == element.isValid || !reflect.DeepEqual(errs, element.errs) {
-			//fmt.Println(reflect.TypeOf(errs),len(errs))
-			//fmt.Println(reflect.TypeOf(element.errs),len(errs))
-			//fmt.Println(reflect.DeepEqual(errs,emptyErrorSet))
-			t.Errorf("Test for Validate Produce Item Failed"+
+		if !isValid == element.isValid || !checkErrorsEqual(errs, element.errs) {
+
+			t.Errorf("Test for Validate Produce Item Failed On test: %s"+
 				" \nExpected bool:%t\nGot bool:%t"+
 				" \nExpected errors:%s\nGot errors:%s",
-				element.isValid, isValid, element.errs, errs)
+				element.TestName, element.isValid, isValid, element.errs, errs)
 		}
 	}
 
+}
+func checkErrorsEqual(a []error, b []error) bool {
+	isEqual := false
+	if len(a) == len(b) {
+		isEqual = true
+		for i, _ := range a {
+			if a[i] != b[i] {
+				isEqual = false
+			}
+		}
+	}
+	return isEqual
 }

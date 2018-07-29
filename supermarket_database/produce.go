@@ -64,7 +64,7 @@ func ValidateProduceItem(item ProduceItem) (bool, []error) {
 	isValidProduceItem = isValidName && isValidPrice && isValidProduceCode
 
 	var errs []error
-	if !isValidProduceCode {
+	if !isValidProduceItem {
 		if !isValidProduceCode {
 			errs = append(errs, INVALID_PRODUCE_CODE_ERROR)
 		}
