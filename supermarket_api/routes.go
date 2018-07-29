@@ -1,8 +1,8 @@
 package supermarket_api
 
 import (
-	"net/http"
 	"SupermarketAPI/supermarket_service"
+	"net/http"
 )
 
 // struct of required fields for mux router
@@ -15,7 +15,6 @@ type Route struct {
 
 // Array of all routes in application
 type Routes []Route
-
 
 var routes = Routes{
 	//Index Greeting page

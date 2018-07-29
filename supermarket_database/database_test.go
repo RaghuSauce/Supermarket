@@ -62,21 +62,20 @@ var database_addItem_tests = []database_addItem_test{
 }
 
 func TestAddProduceItemToDatabase(t *testing.T) {
-	for _, element := range(database_addItem_tests){
+	for _, element := range database_addItem_tests {
 
-		testDB :=  append(initValues,element.item)
+		testDB := append(initValues, element.item)
 
 		c := make(chan []ProduceItem)
 		AddProduceItemToDatabase(element.item)
 		go ListProduceItems(c)
-		db := <- c
+		db := <-c
 
-		if(AreEqual(testDB, db) != element.equal){
+		if AreEqual(testDB, db) != element.equal {
 			t.Error("Error adding produce item to the databse")
 		}
 	}
 }
-
 
 func TestRemoveProduceItemFromDatabase(t *testing.T) {
 	//TODO

@@ -36,7 +36,7 @@ func init() {
 }
 
 //Sends the current database slice via channel to caller
-func ListProduceItems(c chan []ProduceItem){
+func ListProduceItems(c chan []ProduceItem) {
 	c <- database
 	close(c)
 }
@@ -110,7 +110,7 @@ func validateUUID(produceCode string, err chan error) {
 }
 
 //Method to reset the database to initial state, used for testing
-func resetDB(){
+func resetDB() {
 	database = []ProduceItem{
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL9-3N4M",

@@ -4,7 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"regexp"
 	"strings"
-	)
+)
 
 //struct representing one Item of produce in the supermarket
 type ProduceItem struct {
@@ -69,10 +69,10 @@ func ValidateProduceItem(item ProduceItem) (bool, []error) {
 			errs = append(errs, INVALID_PRODUCE_CODE_ERROR)
 		}
 		if !isValidName {
-			errs = append(errs,INVALID_PRODUCE_NAME_ERROR)
+			errs = append(errs, INVALID_PRODUCE_NAME_ERROR)
 		}
 		if !isValidPrice {
-			errs = append(errs,INVALID_PRICE_ERROR)
+			errs = append(errs, INVALID_PRICE_ERROR)
 		}
 	}
 	return isValidProduceItem, errs
