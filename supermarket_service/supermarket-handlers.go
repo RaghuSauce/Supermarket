@@ -5,24 +5,28 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"html"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 )
 
-
 //Get Mapping	"/"
 func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "index, %q", html.EscapeString(r.URL.Path))
+	file, err := ioutil.ReadFile("VERSION")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Print()
+	fmt.Fprintf(w, "%s%s", "Supermarket-API:", string(file))
 }
 
 //Get Mapping  "/fetch "
 func FetchProduceList(w http.ResponseWriter, r *http.Request) {
 	c := make(chan []supermarket_database.ProduceItem)
 	go supermarket_database.ListProduceItems(c)
-	db := <- c
+	db := <-c
 	json.NewEncoder(w).Encode(db)
 }
 
@@ -46,19 +50,18 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-
-	if isValid ,errs := supermarket_database.ValidateProduceItem(produce); (err == nil && isValid){
-		if e := supermarket_database.AddProduceItemToDatabase(produce); e == nil{
+	if isValid, errs := supermarket_database.ValidateProduceItem(produce); err == nil && isValid {
+		if e := supermarket_database.AddProduceItemToDatabase(produce); e == nil {
 			fmt.Fprint(w, "Success")
-		}else {
-			fmt.Fprint(w,e)
+		} else {
+			fmt.Fprint(w, e)
 		}
-	}else {
+	} else {
 		var errorString string
-		for _, err := range errs{
+		for _, err := range errs {
 			errorString += err.Error() + "\n"
 		}
-		fmt.Fprint(w,"Produce Item is invalid for the following reasons \n\n" ,errorString)
+		fmt.Fprint(w, "Produce Item is invalid for the following reasons \n\n", errorString)
 		//fmt.Fprint(w, err)
 	}
 
@@ -67,11 +70,11 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 //Delete Mapping	"/remove"
 func RemoveProduceItem(w http.ResponseWriter, r *http.Request) {
 	produceCode := getProduceCodeUrlParamter(r)
-	 if err := supermarket_database.RemoveProduceItemFromDatabase(produceCode); err != nil{
-	 	fmt.Fprint(w,err)
-	 }else {
-		 fmt.Fprint(w,"success")
-	 }
+	if err := supermarket_database.RemoveProduceItemFromDatabase(produceCode); err != nil {
+		fmt.Fprint(w, err)
+	} else {
+		fmt.Fprint(w, "success")
+	}
 
 }
 
