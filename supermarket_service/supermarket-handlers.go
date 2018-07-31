@@ -73,13 +73,13 @@ func RemoveProduceItem(w http.ResponseWriter, r *http.Request) {
 	if err := supermarket_database.RemoveProduceItemFromDatabase(produceCode); err != nil {
 		fmt.Fprint(w, err)
 	} else {
-		fmt.Fprint(w, "success")
+		fmt.Fprint(w, "Success")
 	}
 
 }
 
 func getProduceCodeUrlParamter(r *http.Request) string {
 	vars := mux.Vars(r) //Get url variables
-	code := strings.Split(vars["Parameter%20Code"], "=")
+	code := strings.Split(vars["code"], "=")
 	return code[1]
 }

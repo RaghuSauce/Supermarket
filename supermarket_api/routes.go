@@ -45,7 +45,7 @@ var routes = Routes{
 	Route{
 		"Remove",
 		"Delete",
-		"/remove/{Parameter%20Code}",
+		"/remove/{code}",
 		supermarket_service.RemoveProduceItem,
 	},
 }

@@ -4,7 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"strings"
 	"sync"
-)
+	)
 
 // array of produce item that is acting as the database
 var database = []ProduceItem{}
@@ -110,27 +110,6 @@ func validateUUID(produceCode string, err chan error) {
 }
 
 //Method to reset the database to initial state, used for testing
-func resetDB() {
-	database = []ProduceItem{
-		ProduceItem{
-			ProduceCode: "A12T-4GH7-QPL9-3N4M",
-			Name:        "Lettuce",
-			UnitPrice:   "3.46",
-		},
-		ProduceItem{
-			ProduceCode: "E5T6-9UI3-TH15-QR88",
-			Name:        "Peach",
-			UnitPrice:   "2.99",
-		},
-		ProduceItem{
-			ProduceCode: "YRT6-72AS-K736-L4AR",
-			Name:        "Green Pepper",
-			UnitPrice:   "0.79",
-		},
-		ProduceItem{
-			ProduceCode: "TQ4C-VV6T-75ZX-1RMR",
-			Name:        "Gala Apple",
-			UnitPrice:   "3.59",
-		},
-	}
+func ResetDB() {
+	 database = nil
 }
