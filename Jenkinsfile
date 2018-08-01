@@ -27,7 +27,9 @@ pipeline {
 
         stage('unit test') {
             steps {
-                sh 'go test ./...'
+                dir('src/SupermarketAPI') {
+                    sh 'go test ./...'
+                }
             }
         }
 
@@ -47,10 +49,25 @@ pipeline {
             }
         }
 
-        stage('temp run') {
+        stage('Integration Test') {
             steps {
-                sh 'docker run -d -p 8081:8081 supermarket_api:latest'
+                sh 'docker run --rm -d -p 8081:8081 supermarket_api'
+                sh 'go test supermarket_service/handlers_integration_test.go -integration'
+                sh 'docker stop supermarket_api'
             }
+
+        }
+        // TODO version images properly
+        stage('Publish to Dockerhub') {
+            withCredwithCredentials([
+                [$class: 'UsernamePasswordMultiBinding', credentialsId: 'DockerHubLogin', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']
+            ])
+            steps {
+                sh 'docker login --username=$USERNAME --password=$PASSWORD'
+                sh 'docker tag supermarket_api $USERNAME/supermarket_api:latest'
+                sh 'docker push supermarket_api'   
+            }
+
         }
     }
 }
