@@ -59,10 +59,11 @@ pipeline {
         }
         // TODO version images properly
         stage('Publish to Dockerhub') {
+            steps {
             withCredwithCredentials([
                 [$class: 'UsernamePasswordMultiBinding', credentialsId: 'DockerHubLogin', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']
             ])
-            steps {
+            
                 sh 'docker login --username=$USERNAME --password=$PASSWORD'
                 sh 'docker tag supermarket_api $USERNAME/supermarket_api:latest'
                 sh 'docker push supermarket_api'   
