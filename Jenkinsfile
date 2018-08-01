@@ -6,6 +6,7 @@ pipeline {
     }
 
     stages {
+
         stage('checkout') {
             steps {
                 dir('src/SupermarketAPI') {
@@ -14,6 +15,7 @@ pipeline {
                 }
             }
         }
+
         stage('install depencies') {
             steps {
                 dir('src/SupermarketAPI') {
@@ -22,6 +24,13 @@ pipeline {
                 }
             }
         }
+
+        stage('unit test') {
+            steps {
+                sh 'go test ./...'
+            }
+        }
+
         stage('Build static bin') {
             steps {
                 dir('src/SupermarketAPI') {
@@ -29,6 +38,7 @@ pipeline {
                 }
             }
         }
+
         stage('Build docker image') {
             steps {
                 dir('src/SupermarketAPI') {
@@ -36,6 +46,7 @@ pipeline {
                 }
             }
         }
+
         stage('temp run') {
             steps {
                 sh 'docker run -d -p 8081:8081 supermarket_api:latest'

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+	"flag"
 )
 
 //Routes
@@ -27,7 +28,15 @@ const (
 	removeCodeURL         = RemoveURL + `A12T-4GH7-QPL9-3N4N`
 )
 
+var(
+	runIntegration = flag.Bool("integration",false,"Flag for running integration tests")
+)
+
 func TestIndex(t *testing.T) {
+	if ! *runIntegration{
+		t.Skip("Skipping Integration Tests")
+	}
+
 	if response, err := http.Get(IndexURL); err != nil {
 		t.Errorf("Error On Index GET\n%s", err)
 	} else {
@@ -42,6 +51,10 @@ func TestIndex(t *testing.T) {
 
 //Test the Fetch Method to get all Items in the database
 func TestFetchProduceList(t *testing.T) {
+	if ! *runIntegration{
+		t.Skip("Skipping Integration Tests")
+	}
+
 	if response, err := http.Get(FetchURL); err != nil { //Check for error on HTTP GET
 		t.Errorf("Error on %s \n Error:%s", FetchURL, err)
 	} else {
@@ -64,6 +77,10 @@ func TestFetchProduceList(t *testing.T) {
 
 //Test Adding to the Database
 func TestAddProduceItem(t *testing.T) {
+	if ! *runIntegration{
+		t.Skip("Skipping Integration Tests")
+	}
+
 	postContent := []byte(AddProduceItemPayload)
 
 	if response, err := http.Post(AddURL, "application/json", bytes.NewBuffer(postContent)); err != nil {
@@ -83,6 +100,9 @@ func TestAddProduceItem(t *testing.T) {
 }
 
 func TestRemoveProduceItem(t *testing.T) {
+	if ! *runIntegration{
+		t.Skip("Skipping Integration Tests")
+	}
 
 	if request, err := http.NewRequest("DELETE", removeCodeURL, nil); err != nil {
 		t.Errorf("error creating request for DELETE \n%s", err)

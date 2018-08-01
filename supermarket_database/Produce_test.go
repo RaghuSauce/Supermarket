@@ -91,7 +91,7 @@ var produce_isEqual_tests = []produce_isEqual_test{
 func TestIsEqual(t *testing.T) {
 	for _, elements := range produce_isEqual_tests {
 		if IsEqual(elements.a, elements.b) != elements.equal {
-			t.Error("Test ProduceCode Equality Failed \n Comparing (%s | %s)", elements.a, elements.b)
+			t.Errorf("Test ProduceCode Equality Failed \n Comparing (%s | %s)", elements.a, elements.b)
 		}
 
 	}
