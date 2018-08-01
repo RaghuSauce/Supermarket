@@ -61,7 +61,7 @@ pipeline {
         stage('Publish to Dockerhub') {
             steps {
                 withDockerRegistry([credentialsId: "DockerHubLogin", url: ""]) {
-                    sh 'docker push raghusauce011/supermarket_api:latest'
+                    sh 'docker push raghusauce011/supermarketchallange:latest'
                 }
             }
         }
