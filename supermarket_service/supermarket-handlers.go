@@ -7,19 +7,19 @@ import (
 	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"
-	"log"
-	"net/http"
+		"net/http"
 	"strings"
 )
 
 //Get Mapping	"/"
 func Index(w http.ResponseWriter, r *http.Request) {
-	file, err := ioutil.ReadFile("VERSION")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Print()
-	fmt.Fprintf(w, "%s%s", "Supermarket-API:", string(file))
+	//file, err := ioutil.ReadFile("VERSION")
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//fmt.Print()
+	//string(file)
+	fmt.Fprintf(w, "%s%s", "Supermarket-API:", "0.0.0")
 }
 
 //Get Mapping  "/fetch "
