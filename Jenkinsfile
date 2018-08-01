@@ -60,8 +60,9 @@ pipeline {
         // TODO version images properly
         stage('Publish to Dockerhub') {
             steps {
-            withDockerRegistry([credentialsId : "DockerHubLogin",url:""]){
-                sh 'docker push raghusauce011/supermarketchallange:latest'
+                withDockerRegistry([credentialsId: "DockerHubLogin", url: ""]) {
+                    sh 'docker push raghusauce011/supermarketchallange:latest'
+                }
             }
         }
     }
