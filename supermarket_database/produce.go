@@ -14,7 +14,6 @@ type ProduceItem struct {
 }
 
 //Regex for Allowed Values for ProduceItems
-//TODO Implement returning proper status codes
 const (
 	PRODUCECODEREGEX = "^(([A-Z 0-9 a-z]){4}-){3}(([A-Z 0-9 a-z]){4})$"
 	NAMEREGEX        = "^(([A-Za-z0-9])*)(\\s[A-Za-z0-9 ]*)?$"
@@ -45,7 +44,6 @@ var (
 )
 
 //Validates the incoming produce Item,
-//TODO return these codes properly to the front response handlers
 func ValidateProduceItem(item ProduceItem) (bool, []error) {
 
 	var isValidProduceItem bool //bool to represent if the produce Item is valid

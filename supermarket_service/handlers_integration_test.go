@@ -28,17 +28,16 @@ const (
 )
 
 func TestIndex(t *testing.T) {
-	if response, err := http.Get(IndexURL); err != nil{
-		t.Errorf("Error On Index GET\n%s",err)
-	}else {
+	if response, err := http.Get(IndexURL); err != nil {
+		t.Errorf("Error On Index GET\n%s", err)
+	} else {
 		defer response.Body.Close()
-		if responseContent , err := ioutil.ReadAll(response.Body); err!= nil{
-			t.Errorf("Error Parsing the response body\n%s",err)
-		}else {
-
+		if responseContent, err := ioutil.ReadAll(response.Body); err != nil {
+			t.Errorf("Error Parsing the response body\n%s", err)
+		} else if !strings.Contains(string(responseContent), IndexResponse) {
+			t.Errorf("Expeted content to contain\n%s\nfound\n%s", IndexResponse, string(responseContent))
 		}
 	}
-
 }
 
 //Test the Fetch Method to get all Items in the database
