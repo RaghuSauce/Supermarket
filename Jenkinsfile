@@ -44,7 +44,7 @@ pipeline {
         stage('Build docker image') {
             steps {
                 dir('src/SupermarketAPI') {
-                    sh 'docker build -t supermarket_api:latest .'
+                    sh 'docker build -t raghusauce011/supermarketchanllange:latest .'
                 }
             }
         }
