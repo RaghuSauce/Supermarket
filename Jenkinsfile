@@ -44,14 +44,14 @@ pipeline {
         stage('Build docker image') {
             steps {
                 dir('src/SupermarketAPI') {
-                    sh 'docker build -t raghusauce011/supermarketchanllange:latest .'
+                    sh 'docker build -t raghusauce011/supermarketchallange:latest .'
                 }
             }
         }
 
         stage('Integration Test') {
             steps {
-                sh 'docker run --name supermarket_api --rm -d -p 8081:8081 supermarket_api'
+                sh 'docker run --name supermarket_api --rm -d -p 8081:8081 raghusauce011/supermarketchallange:latest'
                 sh 'go test supermarket_service/handlers_integration_test.go -integration'
                 sh 'docker stop supermarket_api'
             }
