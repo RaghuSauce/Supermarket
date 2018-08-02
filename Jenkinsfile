@@ -66,7 +66,7 @@ pipeline {
 
                     withDockerRegistry([credentialsId: "DockerHubLogin", url: ""]) {
                         sh 'docker push raghusauce011/supermarketchallange:latest'
-                        sh 'docker push raghusauce011/supermarketchallange:${gitHash}'
+                        sh "docker push raghusauce011/supermarketchallange:${gitHash}"
                     }
                 }
             }
