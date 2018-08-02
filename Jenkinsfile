@@ -43,9 +43,15 @@ pipeline {
 
         stage('Build docker image') {
             steps {
+                script {
+                    gitHash = sh([script: "git show -s --format=%h", returnStdout: true]).trim()
+                    echo "GitHash:${gitHash}"
+                }
                 dir('src/SupermarketAPI') {
                     sh 'docker build -t raghusauce011/supermarketchallange:latest .'
+                    sh "docker -t raghusauce011/supermarketchallange:latest raghusauce011/supermarketchallange:${gitHash}"
                 }
+
             }
         }
 
@@ -60,15 +66,11 @@ pipeline {
         // TODO version images properly
         stage('Publish to Dockerhub') {
             steps {
-                script {
-                    gitHash = sh([script: "git show -s --format=%h", returnStdout: true]).trim()
-                    echo "GitHash:${gitHash}"
-
                     withDockerRegistry([credentialsId: "DockerHubLogin", url: ""]) {
                         sh 'docker push raghusauce011/supermarketchallange:latest'
                         sh "docker push raghusauce011/supermarketchallange:${gitHash}"
                     }
-                }
+                
             }
         }
     }
