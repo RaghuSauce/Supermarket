@@ -19,7 +19,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	//}
 	//fmt.Print()
 	//string(file)
-	fmt.Fprintf(w, "%s%s", "Supermarket-API:", "0.0.0")
+	fmt.Fprintf(w, "%s%s", "Supermarket-API:", "0.0.1")
 }
 
 //Get Mapping  "/fetch "
