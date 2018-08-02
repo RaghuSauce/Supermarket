@@ -60,8 +60,8 @@ pipeline {
         // TODO version images properly
         stage('Publish to Dockerhub') {
             steps {
-                gitHash=sh 'git show -s --format=%h'
                 withDockerRegistry([credentialsId: "DockerHubLogin", url: ""]) {
+                    gitHash = sh 'git show -s --format=%h'
                     sh 'docker push raghusauce011/supermarketchallange:latest'
                     sh 'docker push raghusauce011/supermarketchallange:${gitHash}'
                 }
