@@ -49,7 +49,7 @@ pipeline {
                 }
                 dir('src/SupermarketAPI') {
                     sh 'docker build -t raghusauce011/supermarketchallange:latest .'
-                    sh "docker -t raghusauce011/supermarketchallange:latest raghusauce011/supermarketchallange:${gitHash}"
+                    sh "docker tag raghusauce011/supermarketchallange:latest raghusauce011/supermarketchallange:${gitHash}"
                 }
 
             }
