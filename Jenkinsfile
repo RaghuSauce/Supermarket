@@ -61,7 +61,7 @@ pipeline {
         stage('Publish to Dockerhub') {
             steps {
                 withDockerRegistry([credentialsId: "DockerHubLogin", url: ""]) {
-                    gitHash = sh 'git show -s --format=%h'
+                    gitHash = sh([script:"git show -s --format=%h", returnStdout: true]).trim()
                     sh 'docker push raghusauce011/supermarketchallange:latest'
                     sh 'docker push raghusauce011/supermarketchallange:${gitHash}'
                 }
