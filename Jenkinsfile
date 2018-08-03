@@ -6,8 +6,10 @@ pipeline {
     }
 
     stages {
-        stage('Announce'){
-            slackSend(color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        stage('Announce') {
+            steps {
+                slackSend(color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            }
         }
 
         stage('checkout') {
