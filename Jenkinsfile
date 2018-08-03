@@ -75,6 +75,9 @@ pipeline {
         }
     }
 
+    pre{
+           slackSend(color: '#00FF00', message: "Starting: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+    }
     post {
         // only triggered when blue or green sign
         success {
@@ -85,9 +88,5 @@ pipeline {
             slackSend(color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
         // trigger every-works
-        always {
-            slackSend(color: '#00FF00', message: "Starting: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-
-        }
     }
 }
