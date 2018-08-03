@@ -81,7 +81,7 @@ pipeline {
         stage('Deploy to GKE'){
             steps{
                 sh "echo ${gitHash}"
-                sh "kubectl set image deployment/supermarket-api-deployment supermarket-api-deployment=raghusauce011/supermarketchallange:latest"
+                sh " kubectl set image deployment/supermarket-api-deployment supermarket-api-deployment=raghusauce011/supermarketchallange:${gitHash}"
             }
         }
     }
