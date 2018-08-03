@@ -4,11 +4,12 @@ import (
 	"SupermarketAPI/supermarket_database"
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"
-		"net/http"
+	"net/http"
 	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 //Get Mapping	"/"
@@ -19,7 +20,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	//}
 	//fmt.Print()
 	//string(file)
-	fmt.Fprintf(w, "%s%s", "Supermarket-API:", "0.0.1")
+	fmt.Fprintf(w, "%s%s", "Supermarket-API:", "0.0.2")
 }
 
 //Get Mapping  "/fetch "
