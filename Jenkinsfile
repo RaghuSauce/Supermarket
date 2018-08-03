@@ -80,7 +80,7 @@ pipeline {
         }
         stage('Deploy to GKE'){
             steps{
-                sh "kubectl set image deployment/supermarket-api-deployment supermarket-api-deployment=image=raghusauce011/supermarketchallange:${gitHash}"
+                sh "kubectl set image deployment/supermarket-api-deployment supermarket-api-deployment=image=raghusauce011/supermarketchallange:latest"
             }
         }
     }
