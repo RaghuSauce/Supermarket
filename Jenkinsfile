@@ -78,7 +78,14 @@ pipeline {
 
             }
         }
+        stage('Deploy to GKE'){
+            steps{
+                sh "kubectl run supermarket-api-deployment --image=raghusauce011/supermarketchallange:${gitHash} --port=8081"
+            }
+        }
     }
+
+    
 
     post {
         // only triggered when blue or green sign
