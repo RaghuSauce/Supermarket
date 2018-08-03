@@ -6,6 +6,9 @@ pipeline {
     }
 
     stages {
+        stage('Announce'){
+            slackSend(color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
 
         stage('checkout') {
             steps {
@@ -75,9 +78,6 @@ pipeline {
         }
     }
 
-    pre{
-           slackSend(color: '#00FF00', message: "Starting: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-    }
     post {
         // only triggered when blue or green sign
         success {
