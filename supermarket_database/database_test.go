@@ -35,48 +35,58 @@ func TestListProduceItems(t *testing.T) {
 	testDatabase := initValues
 
 	if !AreEqual(db, testDatabase) {
-		t.Error("Database Not contain the expected initial values")
+		t.Error("Database does not contain the expected initial values")
 	}
 }
 
 type database_addItem_test struct {
-	item  ProduceItem
-	equal bool
+	testName string
+	item     ProduceItem
+	equal    bool
 }
 
 var database_addItem_tests = []database_addItem_test{
-	{ProduceItem{
-		ProduceCode: "A12T-4GH7-QPL9-3N4M",
-		Name:        "Lettuce",
-		UnitPrice:   "3.46",
+	{"Adding new valid ProduceItem",
+		ProduceItem{
+			ProduceCode: "A12T-4GH7-QPL9-3N4N",
+			Name:        "Apple",
+			UnitPrice:   "3.46",
+		},
+		true,
 	},
+
+	{"Adding existing ProduceItem",
+		ProduceItem{
+			ProduceCode: "A12T-4GH7-QPL9-3N4M",
+			Name:        "Lettuce",
+			UnitPrice:   "3.46",
+		},
 		false, //repeated code should not be allowed to be entered
 	},
-	{ProduceItem{
-		ProduceCode: "A12T-4GH7-QPL9-3N4N",
-		Name:        "Apple",
-		UnitPrice:   "3.46",
-	},
-		true,
+	{
+		"Adding Invalid Item",
+		ProduceItem{
+			ProduceCode: "12",
+			Name:        "C))()",
+			UnitPrice:   "12.000",
+		}, false, //Item is Invalid thus should not be added to the db
 	},
 }
 
 func TestAddProduceItemToDatabase(t *testing.T) {
 	for _, element := range database_addItem_tests {
-
-		testDB := append(initValues, element.item)
-
+		testDB := append(initValues, element.item) // Create an array that appends all test produce items to itself
 		c := make(chan []ProduceItem)
-		AddProduceItemToDatabase(element.item)
+		AddProduceItemToDatabase(element.item) //Attempt to add the produce item to the the database
 		go ListProduceItems(c)
-		db := <-c
-
-		if AreEqual(testDB, db) != element.equal {
+		db := <-c                                  //Get the current database
+		if AreEqual(testDB, db) != element.equal { //Check to see if the databases should be equal according to the the test logic
 			t.Error("Error adding produce item to the databse")
 		}
+		testDB = nil //Reset the the test database for the next test case
 	}
 }
 
 func TestRemoveProduceItemFromDatabase(t *testing.T) {
-	//TODO
+
 }

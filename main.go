@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	router := supermarket_api.Supermarket_router()
+	router := supermarket_api.SupermarketRouter()
 	log.Fatal(http.ListenAndServe(":8081", router))
 
 }
