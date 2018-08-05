@@ -72,7 +72,6 @@ func TestFetchProduceList(t *testing.T) {
 			}
 		}
 	}
-
 }
 
 //Test Adding to the Database
@@ -117,8 +116,6 @@ func TestRemoveProduceItem(t *testing.T) {
 			} else if strings.TrimRight(string(responseContent), "\n") != ValidResponse {
 				t.Errorf("Response did not match Expected Result for DELETE\nExpected:%s\nGot:%s", ValidResponse, responseContent)
 			}
-
 		}
-
 	}
 }
