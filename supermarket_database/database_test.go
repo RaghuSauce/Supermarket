@@ -2,7 +2,7 @@ package supermarket_database
 
 import (
 	"testing"
-)
+	)
 
 //Copy of values loaded into database, to create a replica of the database
 var initValues = []ProduceItem{
@@ -40,13 +40,14 @@ func TestListProduceItems(t *testing.T) {
 }
 
 type database_addItem_test struct {
-	testName string
-	item     ProduceItem
-	equal    bool
+	testName string      //The name of the test scenario
+	item     ProduceItem //The Produce item that will be used in the test
+	equal    bool        //The expected result of the database transaction
 }
 
 var database_addItem_tests = []database_addItem_test{
-	{"Adding new valid ProduceItem",
+	{
+		"Adding new valid ProduceItem",
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL9-3N4N",
 			Name:        "Apple",
@@ -55,7 +56,8 @@ var database_addItem_tests = []database_addItem_test{
 		true,
 	},
 
-	{"Adding existing ProduceItem",
+	{
+		"Adding existing ProduceItem",
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL9-3N4M",
 			Name:        "Lettuce",
@@ -77,7 +79,7 @@ func TestAddProduceItemToDatabase(t *testing.T) {
 	for _, element := range database_addItem_tests {
 		testDB := append(initValues, element.item) // Create an array that appends all test produce items to itself
 		c := make(chan []ProduceItem)
-		AddProduceItemToDatabase(element.item) //Attempt to add the produce item to the the database
+		AddProduceItemToDatabase(element.item) //Attempt to add the produce item to the the database, run it normally to make sure we attempt to add the item
 		go ListProduceItems(c)
 		db := <-c                                  //Get the current database
 		if AreEqual(testDB, db) != element.equal { //Check to see if the databases should be equal according to the the test logic
@@ -87,6 +89,105 @@ func TestAddProduceItemToDatabase(t *testing.T) {
 	}
 }
 
+type database_removeItem_test struct {
+	testName       string        //The name of the test scenario
+	item           ProduceItem   //The Produce item that will be used in the test
+	expectedOutput []ProduceItem // the list of items we are expecting back as a a result
+	expectedResult          bool          //The expected result of the database transaction
+}
+
+var database_RemoveItems_test = []database_removeItem_test{
+	{
+		"Valid Removal",
+		ProduceItem{
+			ProduceCode: "A12T-4GH7-QPL9-3N4M",
+			Name:        "Lettuce",
+			UnitPrice:   "3.46",
+		},
+		[]ProduceItem{
+			ProduceItem{
+				ProduceCode: "E5T6-9UI3-TH15-QR88",
+				Name:        "Peach",
+				UnitPrice:   "2.99",
+			},
+			ProduceItem{
+				ProduceCode: "YRT6-72AS-K736-L4AR",
+				Name:        "Green Pepper",
+				UnitPrice:   "0.79",
+			},
+			ProduceItem{
+				ProduceCode: "TQ4C-VV6T-75ZX-1RMR",
+				Name:        "Gala Apple",
+				UnitPrice:   "3.59",
+			},
+		},
+		true,
+	},
+	{
+		"Valid Removal",
+		ProduceItem{
+			ProduceCode: "A12T-4GH7-QPL9-3N4M",
+			Name:        "Lettuce",
+			UnitPrice:   "3.46",
+		},
+		[]ProduceItem{
+			ProduceItem{
+				ProduceCode: "E5T6-9UI3-TH15-QR88",
+				Name:        "Peach",
+				UnitPrice:   "2.99",
+			},
+			ProduceItem{
+				ProduceCode: "YRT6-72AS-K736-L4AR",
+				Name:        "Green Pepper",
+				UnitPrice:   "0.79",
+			},
+			ProduceItem{
+				ProduceCode: "TQ4C-VV6T-75ZX-1RMR",
+				Name:        "Gala Apple",
+				UnitPrice:   "3.59",
+			},
+		},
+		true,
+	},
+	{
+		"Invalid Removal: Tried to remove non existent code",
+		ProduceItem{
+			ProduceCode: "A12T-4GH7-QPL9-3N4N",
+			Name:        "Lettuce",
+			UnitPrice:   "3.46",
+		},
+		[]ProduceItem{
+			ProduceItem{
+				ProduceCode: "E5T6-9UI3-TH15-QR88",
+				Name:        "Peach",
+				UnitPrice:   "2.99",
+			},
+			ProduceItem{
+				ProduceCode: "YRT6-72AS-K736-L4AR",
+				Name:        "Green Pepper",
+				UnitPrice:   "0.79",
+			},
+			ProduceItem{
+				ProduceCode: "TQ4C-VV6T-75ZX-1RMR",
+				Name:        "Gala Apple",
+				UnitPrice:   "3.59",
+			},
+		},
+		true,
+	},
+
+}
+
 func TestRemoveProduceItemFromDatabase(t *testing.T) {
 
+	for _, element := range database_RemoveItems_test{
+		RemoveProduceItemFromDatabase(element.item.ProduceCode)
+		c := make(chan []ProduceItem)
+		go ListProduceItems(c)
+		db := <-c
+		if AreEqual(db, element.expectedOutput) != element.expectedResult{
+			t.Errorf("Failed to remove produce item, \n Failed:%s\nExpected Result and actual result for removing element do not match\nExpected:\n%s\nGot:\n%s",
+			element.testName,element.expectedOutput, db)
+		}
+	}
 }

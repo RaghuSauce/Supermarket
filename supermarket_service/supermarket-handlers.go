@@ -32,7 +32,6 @@ func FetchProduceList(w http.ResponseWriter, r *http.Request) {
 }
 
 //Post Mapping	"/add"
-//TODO Handle Invalid JSON Requests
 func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 	//fmt.Fprintf(w, "Add, %q", html.EscapeString(r.URL.Path))
 	var produce supermarket_database.ProduceItem // Declare a produce Item to to unmarshal into
@@ -52,7 +51,7 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if isValid, errs := supermarket_database.ValidateProduceItem(produce); err == nil && isValid {
-		if e := supermarket_database.AddProduceItemToDatabase(produce); e == nil {
+		 if e := supermarket_database.AddProduceItemToDatabase(produce); e == nil {
 			fmt.Fprint(w, "Success")
 		} else {
 			fmt.Fprint(w, e)
@@ -70,7 +69,7 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 
 //Delete Mapping	"/remove"
 func RemoveProduceItem(w http.ResponseWriter, r *http.Request) {
-	produceCode := getProduceCodeUrlParamter(r)
+	produceCode := getProduceCodeUrlParameter(r)
 	if err := supermarket_database.RemoveProduceItemFromDatabase(produceCode); err != nil {
 		fmt.Fprint(w, err)
 	} else {
@@ -79,7 +78,7 @@ func RemoveProduceItem(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getProduceCodeUrlParamter(r *http.Request) string {
+func getProduceCodeUrlParameter(r *http.Request) string {
 	vars := mux.Vars(r) //Get url variables
 	code := strings.Split(vars["code"], "=")
 	return code[1]
