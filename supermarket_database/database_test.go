@@ -69,9 +69,9 @@ var database_addItem_tests = []database_addItem_test{
 		"Adding Invalid Item",
 		ProduceItem{
 			ProduceCode: "12",
-			Name:        "C))()",
+			Name:        "*",
 			UnitPrice:   "12.000",
-		}, false, //Item is Invalid thus should not be added to the db
+		}, true, //Item is Invalid thus should not be added to the db
 	},
 }
 
@@ -83,9 +83,11 @@ func TestAddProduceItemToDatabase(t *testing.T) {
 		go ListProduceItems(c)
 		db := <-c                                  //Get the current database
 		if AreEqual(testDB, db) != element.equal { //Check to see if the databases should be equal according to the the test logic
-			t.Error("Error adding produce item to the databse")
+			t.Errorf("Error adding produce item to the databse \n Failed Test Case:%s",element.testName)
+
 		}
 		testDB = nil //Reset the the test database for the next test case
+		ResetDB()	//Reset the test database for the next test case
 	}
 }
 
@@ -154,13 +156,14 @@ var database_RemoveItems_test = []database_removeItem_test{
 func TestRemoveProduceItemFromDatabase(t *testing.T) {
 
 	for _, element := range database_RemoveItems_test{
-		RemoveProduceItemFromDatabase(element.item.ProduceCode)
+		RemoveProduceItemFromDatabase(element.item.ProduceCode)		//attempt to remove an item from the database
 		c := make(chan []ProduceItem)
 		go ListProduceItems(c)
-		db := <-c
-		if AreEqual(db, element.expectedOutput) != element.expectedResult{
+		db := <-c	//fetch the current database
+		if AreEqual(db, element.expectedOutput) != element.expectedResult{			//Check to see if the test results and the actual are supposed to be equal
 			t.Errorf("Failed to remove produce item, \n Failed:%s\nExpected Result and actual result for removing element do not match\nExpected:\n%s\nGot:\n%s",
 			element.testName,element.expectedOutput, db)
 		}
+		ResetDB()	//Reset the database for future tests
 	}
 }
