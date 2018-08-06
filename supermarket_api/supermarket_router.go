@@ -31,7 +31,7 @@ func SupermarketLogger(inner http.Handler, name string) http.Handler {
 			name,
 			time.Since(start),
 		}
-		//JsonFileLogger(output)
+		JsonFileLogger(output)
 		StandardOutLogger(output)
 	})
 }

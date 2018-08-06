@@ -2,15 +2,27 @@ package supermarket_api
 
 import (
 	"encoding/json"
-	"fmt"
-	"log"
+		"log"
 	"time"
+	"os"
 )
 
 //TODO
 func JsonFileLogger(out SuperMarketLog) {
-	output, _ := json.Marshal(out)
-	fmt.Println(string(output))
+	output, _ := json.Marshal(out) // Create he output to log
+		//If the file doesn't exist, create it or append to the file
+ 	 f,err := os.OpenFile("rest.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY,0644);
+ 	 if err != nil{
+ 		log.Fatal(err)
+	}
+ 	 if _,err := f.Write([]byte(output)) ; err != nil{		//Write out to the log
+ 	 	log.Fatal(err)
+	 }
+	if err := f.Close(); err != nil{		//Close the writer
+		log.Fatal(err)
+	}
+
+
 }
 func StandardOutLogger(out SuperMarketLog) {
 	outputFormat := "%s\t%s\t%s\t%s"
