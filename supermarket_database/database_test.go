@@ -98,58 +98,6 @@ type database_removeItem_test struct {
 
 var database_RemoveItems_test = []database_removeItem_test{
 	{
-		"Valid Removal",
-		ProduceItem{
-			ProduceCode: "A12T-4GH7-QPL9-3N4M",
-			Name:        "Lettuce",
-			UnitPrice:   "3.46",
-		},
-		[]ProduceItem{
-			ProduceItem{
-				ProduceCode: "E5T6-9UI3-TH15-QR88",
-				Name:        "Peach",
-				UnitPrice:   "2.99",
-			},
-			ProduceItem{
-				ProduceCode: "YRT6-72AS-K736-L4AR",
-				Name:        "Green Pepper",
-				UnitPrice:   "0.79",
-			},
-			ProduceItem{
-				ProduceCode: "TQ4C-VV6T-75ZX-1RMR",
-				Name:        "Gala Apple",
-				UnitPrice:   "3.59",
-			},
-		},
-		true,
-	},
-	{
-		"Valid Removal",
-		ProduceItem{
-			ProduceCode: "A12T-4GH7-QPL9-3N4M",
-			Name:        "Lettuce",
-			UnitPrice:   "3.46",
-		},
-		[]ProduceItem{
-			ProduceItem{
-				ProduceCode: "E5T6-9UI3-TH15-QR88",
-				Name:        "Peach",
-				UnitPrice:   "2.99",
-			},
-			ProduceItem{
-				ProduceCode: "YRT6-72AS-K736-L4AR",
-				Name:        "Green Pepper",
-				UnitPrice:   "0.79",
-			},
-			ProduceItem{
-				ProduceCode: "TQ4C-VV6T-75ZX-1RMR",
-				Name:        "Gala Apple",
-				UnitPrice:   "3.59",
-			},
-		},
-		true,
-	},
-	{
 		"Invalid Removal: Tried to remove non existent code",
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL9-3N4N",
@@ -173,9 +121,34 @@ var database_RemoveItems_test = []database_removeItem_test{
 				UnitPrice:   "3.59",
 			},
 		},
+		false,
+	},
+	{
+		"Valid Removal",
+		ProduceItem{
+			ProduceCode: "A12T-4GH7-QPL9-3N4M",
+			Name:        "Lettuce",
+			UnitPrice:   "3.46",
+		},
+		[]ProduceItem{
+			ProduceItem{
+				ProduceCode: "E5T6-9UI3-TH15-QR88",
+				Name:        "Peach",
+				UnitPrice:   "2.99",
+			},
+			ProduceItem{
+				ProduceCode: "YRT6-72AS-K736-L4AR",
+				Name:        "Green Pepper",
+				UnitPrice:   "0.79",
+			},
+			ProduceItem{
+				ProduceCode: "TQ4C-VV6T-75ZX-1RMR",
+				Name:        "Gala Apple",
+				UnitPrice:   "3.59",
+			},
+		},
 		true,
 	},
-
 }
 
 func TestRemoveProduceItemFromDatabase(t *testing.T) {
