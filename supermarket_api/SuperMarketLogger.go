@@ -33,7 +33,6 @@ func StandardOutLogger(out SuperMarketLog) {
 		out.Name,
 		out.Time,
 	)
-
 }
 
 //output ,_:= json.Marshal(outputStruct)
