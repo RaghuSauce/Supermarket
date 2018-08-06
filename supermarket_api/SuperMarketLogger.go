@@ -7,15 +7,16 @@ import (
 	"os"
 )
 
-//TODO
+
 func JsonFileLogger(out SuperMarketLog) {
 	output, _ := json.Marshal(out) // Create he output to log
+	stringOutput := string(output) + "\n" // Append a newline to the output
 		//If the file doesn't exist, create it or append to the file
  	 f,err := os.OpenFile("rest.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY,0644);
  	 if err != nil{
  		log.Fatal(err)
 	}
- 	 if _,err := f.Write([]byte(output)) ; err != nil{		//Write out to the log
+ 	 if _,err := f.Write([]byte(stringOutput)) ; err != nil{		//Write out to the log
  	 	log.Fatal(err)
 	 }
 	if err := f.Close(); err != nil{		//Close the writer
