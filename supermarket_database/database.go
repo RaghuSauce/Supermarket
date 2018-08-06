@@ -4,7 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"strings"
 	"sync"
-	)
+)
 
 // array of produce item that is acting as the database
 var database = []ProduceItem{}
@@ -59,7 +59,7 @@ func RemoveProduceItemFromDatabase(produceCode string) error {
 			newDatabase := []ProduceItem{}     //new slice
 			for _, element := range database { //iterate over existing db and add all but selected code
 				if element.ProduceCode != produceCode { //if the produce codes are equal
-				// a = append(a[:i], a[i+1:]...)	some research unveiled this, might be more performant but I don't fully understand variadics yet
+					// a = append(a[:i], a[i+1:]...)	some research unveiled this, might be more performant but I don't fully understand variadics yet
 					newDatabase = append(newDatabase, element) //append element to new db
 				}
 			}
@@ -91,7 +91,7 @@ func validateUUID(produceCode string, err chan error) {
 
 //Method to reset the database to initial state, used for testing
 func ResetDB() {
-	database = 	[]ProduceItem{
+	database = []ProduceItem{
 		ProduceItem{
 			ProduceCode: "A12T-4GH7-QPL9-3N4M",
 			Name:        "Lettuce",

@@ -2,7 +2,7 @@ package supermarket_database
 
 import (
 	"testing"
-	)
+)
 
 //Copy of values loaded into database, to create a replica of the database
 var initValues = []ProduceItem{
@@ -83,11 +83,11 @@ func TestAddProduceItemToDatabase(t *testing.T) {
 		go ListProduceItems(c)
 		db := <-c                                  //Get the current database
 		if AreEqual(testDB, db) != element.equal { //Check to see if the databases should be equal according to the the test logic
-			t.Errorf("Error adding produce item to the databse \n Failed Test Case:%s",element.testName)
+			t.Errorf("Error adding produce item to the databse \n Failed Test Case:%s", element.testName)
 
 		}
 		testDB = nil //Reset the the test database for the next test case
-		ResetDB()	//Reset the test database for the next test case
+		ResetDB()    //Reset the test database for the next test case
 	}
 }
 
@@ -95,7 +95,7 @@ type database_removeItem_test struct {
 	testName       string        //The name of the test scenario
 	item           ProduceItem   //The Produce item that will be used in the test
 	expectedOutput []ProduceItem // the list of items we are expecting back as a a result
-	expectedResult          bool          //The expected result of the database transaction
+	expectedResult bool          //The expected result of the database transaction
 }
 
 var database_RemoveItems_test = []database_removeItem_test{
@@ -155,15 +155,15 @@ var database_RemoveItems_test = []database_removeItem_test{
 
 func TestRemoveProduceItemFromDatabase(t *testing.T) {
 
-	for _, element := range database_RemoveItems_test{
-		RemoveProduceItemFromDatabase(element.item.ProduceCode)		//attempt to remove an item from the database
+	for _, element := range database_RemoveItems_test {
+		RemoveProduceItemFromDatabase(element.item.ProduceCode) //attempt to remove an item from the database
 		c := make(chan []ProduceItem)
 		go ListProduceItems(c)
-		db := <-c	//fetch the current database
-		if AreEqual(db, element.expectedOutput) != element.expectedResult{			//Check to see if the test results and the actual are supposed to be equal
+		db := <-c                                                           //fetch the current database
+		if AreEqual(db, element.expectedOutput) != element.expectedResult { //Check to see if the test results and the actual are supposed to be equal
 			t.Errorf("Failed to remove produce item, \n Failed:%s\nExpected Result and actual result for removing element do not match\nExpected:\n%s\nGot:\n%s",
-			element.testName,element.expectedOutput, db)
+				element.testName, element.expectedOutput, db)
 		}
-		ResetDB()	//Reset the database for future tests
+		ResetDB() //Reset the database for future tests
 	}
 }

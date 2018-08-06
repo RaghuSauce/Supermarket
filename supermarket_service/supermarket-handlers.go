@@ -10,14 +10,14 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	)
+)
 
 //Get Mapping	"/"
 func Index(w http.ResponseWriter, r *http.Request) {
 	file, err := ioutil.ReadFile("VERSION")
 	if err != nil {
 		fmt.Fprint(w, err)
-	}else {
+	} else {
 		fmt.Fprintf(w, "%s%s", "Supermarket-API:", string(file))
 	}
 
@@ -51,7 +51,7 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if isValid, errs := supermarket_database.ValidateProduceItem(produce); err == nil && isValid {
-		 if e := supermarket_database.AddProduceItemToDatabase(produce); e == nil {
+		if e := supermarket_database.AddProduceItemToDatabase(produce); e == nil {
 			fmt.Fprint(w, "Success")
 		} else {
 			fmt.Fprint(w, e)

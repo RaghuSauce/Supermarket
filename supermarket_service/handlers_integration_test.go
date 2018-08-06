@@ -2,11 +2,11 @@ package supermarket_service
 
 import (
 	"bytes"
+	"flag"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"testing"
-	"flag"
 )
 
 //Routes
@@ -28,12 +28,12 @@ const (
 	removeCodeURL         = RemoveURL + `A12T-4GH7-QPL9-3N4N`
 )
 
-var(
-	runIntegration = flag.Bool("integration",false,"Flag for running integration tests")
+var (
+	runIntegration = flag.Bool("integration", false, "Flag for running integration tests")
 )
 
 func TestIndex(t *testing.T) {
-	if ! *runIntegration{
+	if !*runIntegration {
 		t.Skip("Skipping Integration Tests")
 	}
 
@@ -51,7 +51,7 @@ func TestIndex(t *testing.T) {
 
 //Test the Fetch Method to get all Items in the database
 func TestFetchProduceList(t *testing.T) {
-	if ! *runIntegration{
+	if !*runIntegration {
 		t.Skip("Skipping Integration Tests")
 	}
 
@@ -76,7 +76,7 @@ func TestFetchProduceList(t *testing.T) {
 
 //Test Adding to the Database
 func TestAddProduceItem(t *testing.T) {
-	if ! *runIntegration{
+	if !*runIntegration {
 		t.Skip("Skipping Integration Tests")
 	}
 
@@ -99,7 +99,7 @@ func TestAddProduceItem(t *testing.T) {
 }
 
 func TestRemoveProduceItem(t *testing.T) {
-	if ! *runIntegration{
+	if !*runIntegration {
 		t.Skip("Skipping Integration Tests")
 	}
 
