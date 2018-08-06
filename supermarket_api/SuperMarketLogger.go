@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func JsonFileLogger(out SuperMarketLog) {
+func JsonFileLogger(out SuperMarketLog) error{
 	output, _ := json.Marshal(out)        // Create he output to log
 	stringOutput := string(output) + "\n" // Append a newline to the output
 	//If the file doesn't exist, create it or append to the file
@@ -21,6 +21,12 @@ func JsonFileLogger(out SuperMarketLog) {
 	if err := f.Close(); err != nil { //Close the writer
 		log.Fatal(err)
 	}
+	return err
+}
+//Deletes the log
+func ResetLog()error{
+	err := os.Remove("rest.log")
+	return err
 }
 func StandardOutLogger(out SuperMarketLog) {
 	outputFormat := "%s\t%s\t%s\t%s"
