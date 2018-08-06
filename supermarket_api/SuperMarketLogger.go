@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func JsonFileLogger(out SuperMarketLog) error{
+func JsonFileLogger(out SuperMarketLog) error {
 	output, _ := json.Marshal(out)        // Create he output to log
 	stringOutput := string(output) + "\n" // Append a newline to the output
 	//If the file doesn't exist, create it or append to the file
