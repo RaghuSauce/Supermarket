@@ -1,5 +1,6 @@
 FROM scratch
 ADD main /
+COPY VERSION VERSION
 CMD ["/main"]
 
 #script used to build statically linked bin

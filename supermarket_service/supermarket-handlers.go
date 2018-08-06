@@ -10,17 +10,17 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-)
+	)
 
 //Get Mapping	"/"
 func Index(w http.ResponseWriter, r *http.Request) {
-	//file, err := ioutil.ReadFile("VERSION")
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//fmt.Print()
-	//string(file)
-	fmt.Fprintf(w, "%s%s", "Supermarket-API:", "0.0.1")
+	file, err := ioutil.ReadFile("VERSION")
+	if err != nil {
+		fmt.Fprint(w, err)
+	}else {
+		fmt.Fprintf(w, "%s%s", "Supermarket-API:", string(file))
+	}
+
 }
 
 //Get Mapping  "/fetch "
