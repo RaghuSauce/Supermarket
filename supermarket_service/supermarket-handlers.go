@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+		"os"
 )
 
 //Get Mapping	"/"
@@ -29,6 +30,17 @@ func FetchProduceList(w http.ResponseWriter, r *http.Request) {
 	go supermarket_database.ListProduceItems(c)
 	db := <-c
 	json.NewEncoder(w).Encode(db)
+}
+
+//Get Mapping "/Logs"
+func GetLogs(w http.ResponseWriter, r *http.Request){
+	b, err := ioutil.ReadFile("rest.log") // just pass the file name
+	if err != nil { 	//if there is an error rerturn to the user and set header to 500
+		w.WriteHeader(500)
+		fmt.Fprint(w,err)
+	}
+	str := string(b) // convert content to a 'string'
+	fmt.Fprintln(w,str) // print the content as a 'string'
 }
 
 //Post Mapping	"/add"
@@ -75,6 +87,17 @@ func RemoveProduceItem(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Fprint(w, "Success")
 	}
+
+}
+//Wipe the logs out
+func CleanLogs(w http.ResponseWriter, r *http.Request) {
+	if err := os.Remove("rest.log") ; err != nil{		//remove the file containing the logs
+		w.WriteHeader(500)
+		fmt.Fprint(w,err)
+	}else {
+		fmt.Fprint(w,"Logs Purged")
+	}
+
 
 }
 

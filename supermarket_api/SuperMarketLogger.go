@@ -23,11 +23,7 @@ func JsonFileLogger(out SuperMarketLog) error{
 	}
 	return err
 }
-//Deletes the log
-func ResetLog()error{
-	err := os.Remove("rest.log")
-	return err
-}
+
 func StandardOutLogger(out SuperMarketLog) {
 	outputFormat := "%s\t%s\t%s\t%s"
 	log.Printf(

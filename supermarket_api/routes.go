@@ -33,6 +33,14 @@ var routes = Routes{
 		supermarket_service.FetchProduceList,
 	},
 
+	//Get the stored logs
+	Route{
+		"GetLogs",
+		"GET",
+		"/logs",
+		supermarket_service.GetLogs,
+	},
+
 	//Add a produce Item
 	Route{
 		"Add",
@@ -44,8 +52,15 @@ var routes = Routes{
 	//Remove A produce Item
 	Route{
 		"Remove",
-		"Delete",
+		"DELETE",
 		"/remove/{code}",
 		supermarket_service.RemoveProduceItem,
+	},
+	//Purge the log
+	Route{
+		"CleanLogs",
+		"DELETE",
+		"/purgeLogs",
+		supermarket_service.CleanLogs,
 	},
 }
