@@ -28,13 +28,57 @@ var initValues = []ProduceItem{
 	},
 }
 
-func TestListProduceItems(t *testing.T) {
-	c := make(chan []ProduceItem)
-	go ListProduceItems(c)
-	db := <-c
-	testDatabase := initValues
+type database_getOne_test struct {
+	testName      string //The name of the test case
+	itemCode      string //The Item code we are looking for
+	isValidSearch bool   //Are we expecting to find the value
+}
 
-	if !AreEqual(db, testDatabase) {
+var database_getOne_tests = []database_getOne_test{
+	{
+		"Valid Search 1",
+		"A12T-4GH7-QPL9-3N4M",
+		true,
+	},
+	{
+		"Valid Search 2",
+		"E5T6-9UI3-TH15-QR88",
+		true,
+	},
+	{
+		"Search for non existent item",
+		"E5T6-9UI3-TH15-QR8N",
+		false,
+	},
+	{
+		"Search for Erroneous Item",
+		"12",
+		false,
+	},
+}
+
+func TestGetOneProduceItem(t *testing.T) {
+	for _, element := range database_getOne_tests { //For each item in the test cases
+		itemExits, item := GetProduceItem(element.itemCode) //get the produce item and the bool indicating if it exists or not
+		if itemExits == element.isValidSearch {             //if the retrieved bool and expected bool are equal && the produce codes of both items are the same, do nothing
+			if item.ProduceCode == element.itemCode {
+				//	do nothing
+			}
+		} else { //Else Error out
+			t.Errorf("Error finding Produce item\nFailed:%s"+
+				"Expected ItemCode:%s\nGot:%s",
+				element.testName, element.itemCode, item.ProduceCode)
+		}
+	}
+}
+
+func TestListProduceItems(t *testing.T) {
+	c := make(chan []ProduceItem) //make a chan to the database
+	go ListProduceItems(c)        // populate the channel with db items
+	db := <-c                     //dump channel to var
+	testDatabase := initValues    //Create test database for comparison
+
+	if !AreEqual(db, testDatabase) { //check if they are equal
 		t.Error("Database does not contain the expected initial values")
 	}
 }

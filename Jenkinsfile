@@ -21,7 +21,7 @@ pipeline {
             }
         }
 
-        stage('install depencies') {
+        stage('install dependencies') {
             steps {
                 dir('src/SupermarketAPI') {
                     sh 'go get'

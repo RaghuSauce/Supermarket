@@ -33,6 +33,14 @@ var routes = Routes{
 		supermarket_service.FetchProduceList,
 	},
 
+	//Get the list of all produce currently available
+	Route{
+		"GetOne",
+		"GET",
+		"/get/{code}",
+		supermarket_service.GetOne,
+	},
+
 	//Get the stored logs
 	Route{
 		"GetLogs",

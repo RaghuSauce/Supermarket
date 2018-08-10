@@ -21,6 +21,25 @@ func ListProduceItems(c chan []ProduceItem) {
 	close(c)
 }
 
+func GetProduceItem(produceCode string) (bool, ProduceItem) {
+	var item ProduceItem
+	var itemExists bool = false
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	go func() {
+		defer wg.Done()
+		for _, element := range database {
+			if element.ProduceCode == produceCode {
+				itemExists = true
+				item = element
+			}
+		}
+	}()
+	wg.Wait()
+	return itemExists,item
+}
+
 //All produce items are assumed that they will enter via the api, thus validation will occur at the api layer
 //Adds a produce item to the database if its Produce Code is valid
 func AddProduceItemToDatabase(item ProduceItem) error {

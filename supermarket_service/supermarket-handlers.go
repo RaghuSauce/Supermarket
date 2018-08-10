@@ -15,26 +15,42 @@ import (
 
 //Get Mapping	"/"
 func Index(w http.ResponseWriter, r *http.Request) {
-	file, err := ioutil.ReadFile("VERSION")
-	if err != nil {
+	file, err := ioutil.ReadFile("VERSION") // read the version file
+	if err != nil {                         //if an error occurs tell the user
+		w.WriteHeader(500)
 		fmt.Fprint(w, err)
-	} else {
+	} else { // else return the version of the api in use
+		w.WriteHeader(200)
 		fmt.Fprintf(w, "%s%s", "Supermarket-API:", string(file))
+	}
+}
+
+func GetOne(w http.ResponseWriter, r *http.Request) {
+	produceCode := getProduceCodeUrlParameter(r)                        //get the code from the request
+	fileExits, item := supermarket_database.GetProduceItem(produceCode) //see if it exits
+
+	if fileExits { //if it does return it
+		w.WriteHeader(200)
+		json.NewEncoder(w).Encode(item)
+	} else { // else let the user know it wasn't found
+		fmt.Fprintf(w, "produce item with code %s not found in the database", produceCode)
 	}
 }
 
 //Get Mapping  "/fetch "
 func FetchProduceList(w http.ResponseWriter, r *http.Request) {
-	c := make(chan []supermarket_database.ProduceItem)
-	go supermarket_database.ListProduceItems(c)
-	db := <-c
-	json.NewEncoder(w).Encode(db)
+	c := make(chan []supermarket_database.ProduceItem)                 //make for the list of produce items
+	go supermarket_database.ListProduceItems(c)                        //populate the channel of the items
+	db := <-c                                                          //get the items in the channel
+	w.WriteHeader(200)                                                 //set the response code
+	w.Header().Set("Content-Type", "application/json ; charset=UTF-8") //Set the response type
+	json.NewEncoder(w).Encode(db)                                      //return the list
 }
 
 //Get Mapping "/Logs"
 func GetLogs(w http.ResponseWriter, r *http.Request) {
 	b, err := ioutil.ReadFile("rest.log") // just pass the file name
-	if err != nil {                       //if there is an error rerturn to the user and set header to 500
+	if err != nil {                       //if there is an error return to the user and set header to 500
 		w.WriteHeader(500)
 		fmt.Fprint(w, err)
 	}
@@ -63,6 +79,7 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 
 	if isValid, errs := supermarket_database.ValidateProduceItem(produce); err == nil && isValid {
 		if e := supermarket_database.AddProduceItemToDatabase(produce); e == nil {
+			w.WriteHeader(200)
 			fmt.Fprint(w, "Success")
 		} else {
 			fmt.Fprint(w, e)
@@ -72,6 +89,7 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 		for _, err := range errs {
 			errorString += err.Error() + "\n"
 		}
+		w.WriteHeader(500)
 		fmt.Fprint(w, "Produce Item is invalid for the following reasons \n\n", errorString)
 		//fmt.Fprint(w, err)
 	}
@@ -81,18 +99,22 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 func RemoveProduceItem(w http.ResponseWriter, r *http.Request) {
 	produceCode := getProduceCodeUrlParameter(r)
 	if err := supermarket_database.RemoveProduceItemFromDatabase(produceCode); err != nil {
+		w.WriteHeader(500)
 		fmt.Fprint(w, err)
 	} else {
+		w.WriteHeader(200)
 		fmt.Fprint(w, "Success")
 	}
 }
 
+//Delete Mapping 		"/purgeLogs"
 //Wipe the logs out
 func CleanLogs(w http.ResponseWriter, r *http.Request) {
 	if err := os.Remove("rest.log"); err != nil { //remove the file containing the logs
 		w.WriteHeader(500)
 		fmt.Fprint(w, err)
 	} else {
+		w.WriteHeader(200)
 		fmt.Fprint(w, "Logs Purged")
 	}
 }
