@@ -3,11 +3,20 @@ package supermarket_api
 import (
 	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 	"time"
-	"net/http"
 )
 
+//Struct used to hold route information that will be logged out
+type SuperMarketLog struct {
+	Method     string        `JSON:"method"`
+	RequestURI string        `JSON:"request-uri"`
+	Name       string        `JSON:"path"`
+	Time       time.Duration `JSON:"time"`
+}
+
+//Function to handle logging for the Supermarket application
 func SupermarketLogger(inner http.Handler, name string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
@@ -23,6 +32,7 @@ func SupermarketLogger(inner http.Handler, name string) http.Handler {
 	})
 }
 
+//Logs all accessed routes to a file in json format
 func JsonFileLogger(out SuperMarketLog) error {
 	output, _ := json.Marshal(out)        // Create he output to log
 	stringOutput := string(output) + "\n" // Append a newline to the output
@@ -40,6 +50,7 @@ func JsonFileLogger(out SuperMarketLog) error {
 	return err
 }
 
+//Logs all accessed routes to sout in a tab separated line
 func StandardOutLogger(out SuperMarketLog) {
 	outputFormat := "%s\t%s\t%s\t%s"
 	log.Printf(
@@ -49,14 +60,4 @@ func StandardOutLogger(out SuperMarketLog) {
 		out.Name,
 		out.Time,
 	)
-}
-
-//output ,_:= json.Marshal(outputStruct)
-//fmt.Printf("%s\n",outputStruct.Time)
-
-type SuperMarketLog struct {
-	Method     string        `JSON:"method"`
-	RequestURI string        `JSON:"request-uri"`
-	Name       string        `JSON:"path"`
-	Time       time.Duration `JSON:"time"`
 }

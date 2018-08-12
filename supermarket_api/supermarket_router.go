@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+//Function to create a Router for the supermarket API
 func SupermarketRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
