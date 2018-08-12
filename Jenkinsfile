@@ -48,13 +48,12 @@ pipeline {
 
         stage('Build docker image') {
             steps {
-                dir('src/SupermarketChallenge') {
                     script {
                         gitHash = sh([script: "git show -s --format=%h", returnStdout: true]).trim()
-                        version = readFile(VERSION)
+                        dir('src/SupermarketChallenge') {version = readFile(VERSION)}
                         echo "GitHash:${gitHash}"
                     }
-                }
+
                 dir('src/SupermarketChallenge') {
                     sh 'docker build -t raghusauce011/supermarketchallenge:latest .'
                     sh "docker tag raghusauce011/supermarketchallenge:latest raghusauce011/supermarketchallenge:${gitHash}"
