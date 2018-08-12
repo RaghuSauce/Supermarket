@@ -48,9 +48,9 @@ pipeline {
 
         stage('Build docker image') {
             steps {
+            dir('src/SupermarketChallenge') {version = readFile(VERSION)}
                     script {
                         gitHash = sh([script: "git show -s --format=%h", returnStdout: true]).trim()
-                        dir('src/SupermarketChallenge') {version = readFile(VERSION)}
                         echo "GitHash:${gitHash}"
                     }
 
