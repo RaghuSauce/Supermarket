@@ -27,8 +27,8 @@ const (
 	AddProduceItemPayload = `{"producecode":"A12T-4GH7-QPL9-3N4N","name":"Andy Sandberg","unitprice":"30.46"}`
 	ValidResponse         = `Success`
 	removeCodeURL         = RemoveURL + `A12T-4GH7-QPL9-3N4N`
-	getOneCode = `A12T-4GH7-QPL9-3N4N`
-	getOneResponse = AddProduceItemPayload
+	getOneCodeURL         = GetOneURL + `A12T-4GH7-QPL9-3N4N`
+	getOneResponse        = AddProduceItemPayload //`{"producecode":"A12T-4GH7-QPL9-3N4M","name":"Lettuce","unitprice":"3.46"}`
 )
 
 var (
@@ -100,24 +100,25 @@ func TestAddProduceItem(t *testing.T) {
 		}
 	}
 }
-//Test Adding the
-func TestGetOne(t *testing.T){
+
+//Test gettingOne code from the database
+func TestGetOne(t *testing.T) {
 	if !*runIntegration {
 		t.Skip("Skipping Integration Tests")
 	}
 
-	if response, err := http.Get(GetOneURL); err != nil {		//check for error on HTTP GET
+	if response, err := http.Get(getOneCodeURL); err != nil { //check for error on HTTP GET
 		t.Errorf("Error on %s \n Error:%s", FetchURL, err)
-	} else{
+	} else {
 		defer response.Body.Close()
-		if responseContent , err := ioutil.ReadAll(response.Body); err != nil { //Check for error on reading the response  body
+		if responseContent, err := ioutil.ReadAll(response.Body); err != nil { //Check for error on reading the response  body
 			t.Errorf("Error while parsing the reponse body \n %s", err)
 		} else {
 			//	Check to see if the response equals what is expected
-			if strings.TrimRight(string(responseContent), "\n") != FetchResponse {
+			if strings.TrimRight(string(responseContent), "\n") != getOneResponse {
 				t.Errorf("Response Mismatch for getOne endpoint\n"+
 					"Expected:%s\nGot:%s",
-					FetchResponse, responseContent)
+					getOneResponse, responseContent)
 
 			}
 		}
