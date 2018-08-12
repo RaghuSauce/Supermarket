@@ -3,7 +3,6 @@ package supermarket_api
 import (
 	"github.com/gorilla/mux"
 	"net/http"
-	"time"
 )
 
 func SupermarketRouter() *mux.Router {
@@ -19,19 +18,4 @@ func SupermarketRouter() *mux.Router {
 			Handler(handler)
 	}
 	return router
-}
-
-func SupermarketLogger(inner http.Handler, name string) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
-		inner.ServeHTTP(w, r)
-		output := SuperMarketLog{
-			r.Method,
-			r.RequestURI,
-			name,
-			time.Since(start),
-		}
-		JsonFileLogger(output)
-		StandardOutLogger(output)
-	})
 }

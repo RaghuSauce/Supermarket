@@ -5,7 +5,23 @@ import (
 	"log"
 	"os"
 	"time"
+	"net/http"
 )
+
+func SupermarketLogger(inner http.Handler, name string) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		inner.ServeHTTP(w, r)
+		output := SuperMarketLog{
+			r.Method,
+			r.RequestURI,
+			name,
+			time.Since(start),
+		}
+		JsonFileLogger(output)
+		StandardOutLogger(output)
+	})
+}
 
 func JsonFileLogger(out SuperMarketLog) error {
 	output, _ := json.Marshal(out)        // Create he output to log
