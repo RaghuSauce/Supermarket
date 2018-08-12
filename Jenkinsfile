@@ -14,7 +14,7 @@ pipeline {
 
         stage('checkout') {
             steps {
-                dir('src/SupermarketAPI') {
+                dir('src/SupermarketChallenge') {
                     checkout scm
                     sh 'go env'
                 }
@@ -23,7 +23,7 @@ pipeline {
 
         stage('install dependencies') {
             steps {
-                dir('src/SupermarketAPI') {
+                dir('src/SupermarketChallenge') {
                     sh 'go get'
                     sh 'go install'
                 }
@@ -32,7 +32,7 @@ pipeline {
 
         stage('unit test') {
             steps {
-                dir('src/SupermarketAPI') {
+                dir('src/SupermarketChallenge') {
                     sh 'go test ./...'
                 }
             }
@@ -40,7 +40,7 @@ pipeline {
 
         stage('Build static bin') {
             steps {
-                dir('src/SupermarketAPI') {
+                dir('src/SupermarketChallenge') {
                     sh './build.sh'
                 }
             }
@@ -52,9 +52,9 @@ pipeline {
                     gitHash = sh([script: "git show -s --format=%h", returnStdout: true]).trim()
                     echo "GitHash:${gitHash}"
                 }
-                dir('src/SupermarketAPI') {
-                    sh 'docker build -t raghusauce011/supermarketchallange:latest .'
-                    sh "docker tag raghusauce011/supermarketchallange:latest raghusauce011/supermarketchallange:${gitHash}"
+                dir('src/SupermarketChallenge') {
+                    sh 'docker build -t raghusauce011/supermarketchallenge:latest .'
+                    sh "docker tag raghusauce011/supermarketchallenge:latest raghusauce011/supermarketchallenge:${gitHash}"
                 }
 
             }
@@ -62,8 +62,8 @@ pipeline {
 
         stage('Integration Test') {
             steps {
-                sh 'docker run --name supermarket_api --rm -d -p 8081:8081 raghusauce011/supermarketchallange:latest'
-                sh 'go test supermarket_service/handlers_integration_test.go -integration'
+                sh 'docker run --name supermarket_api --rm -d -p 8081:8081 raghusauce011/supermarketchallenge:latest'
+                sh 'go test smservice/handlers_integration_test.go -integration'
                 sh 'docker stop supermarket_api'
             }
 

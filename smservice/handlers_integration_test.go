@@ -1,4 +1,4 @@
-package supermarket_service
+package smservice
 
 import (
 	"bytes"

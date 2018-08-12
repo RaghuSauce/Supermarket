@@ -1,7 +1,7 @@
-package supermarket_service
+package smservice
 
 import (
-	"SupermarketChallange/supermarket_database"
+	"SupermarketChallenge/smdb"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -26,8 +26,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetOne(w http.ResponseWriter, r *http.Request) {
-	produceCode := getProduceCodeUrlParameter(r)                        //get the code from the request
-	fileExits, item := supermarket_database.GetProduceItem(produceCode) //see if it exits
+	produceCode := getProduceCodeUrlParameter(r)        //get the code from the request
+	fileExits, item := smdb.GetProduceItem(produceCode) //see if it exits
 
 	if fileExits { //if it does return it
 		w.WriteHeader(200)
@@ -39,8 +39,8 @@ func GetOne(w http.ResponseWriter, r *http.Request) {
 
 //Get Mapping  "/fetch "
 func FetchProduceList(w http.ResponseWriter, r *http.Request) {
-	c := make(chan []supermarket_database.ProduceItem)                 //make for the list of produce items
-	go supermarket_database.ListProduceItems(c)                        //populate the channel of the items
+	c := make(chan []smdb.ProduceItem)                                 //make for the list of produce items
+	go smdb.ListProduceItems(c)                                        //populate the channel of the items
 	db := <-c                                                          //get the items in the channel
 	w.WriteHeader(200)                                                 //set the response code
 	w.Header().Set("Content-Type", "application/json ; charset=UTF-8") //Set the response type
@@ -61,7 +61,7 @@ func GetLogs(w http.ResponseWriter, r *http.Request) {
 //Post Mapping	"/add"
 func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 	//fmt.Fprintf(w, "Add, %q", html.EscapeString(r.URL.Path))
-	var produce supermarket_database.ProduceItem // Declare a produce Item to to unmarshal into
+	var produce smdb.ProduceItem // Declare a produce Item to to unmarshal into
 
 	body, err := ioutil.ReadAll(
 		io.LimitReader(r.Body, 1048576)) // Read the body of the request and limit the body size to 1MB
@@ -77,8 +77,8 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if isValid, errs := supermarket_database.ValidateProduceItem(produce); err == nil && isValid {
-		if e := supermarket_database.AddProduceItemToDatabase(produce); e == nil {
+	if isValid, errs := smdb.ValidateProduceItem(produce); err == nil && isValid {
+		if e := smdb.AddProduceItemToDatabase(produce); e == nil {
 			w.WriteHeader(200)
 			fmt.Fprint(w, "Success")
 		} else {
@@ -98,7 +98,7 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 //Delete Mapping	"/remove"
 func RemoveProduceItem(w http.ResponseWriter, r *http.Request) {
 	produceCode := getProduceCodeUrlParameter(r)
-	if err := supermarket_database.RemoveProduceItemFromDatabase(produceCode); err != nil {
+	if err := smdb.RemoveProduceItemFromDatabase(produceCode); err != nil {
 		w.WriteHeader(500)
 		fmt.Fprint(w, err)
 	} else {

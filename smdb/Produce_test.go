@@ -1,4 +1,4 @@
-package supermarket_database
+package smdb
 
 import (
 	"testing"

@@ -1,12 +1,12 @@
 package main
 
 import (
-	"SupermarketChallange/supermarket_api"
+	"SupermarketChallenge/smapi"
 	"log"
 	"net/http"
 )
 
 func main() {
-	router := supermarket_api.SupermarketRouter()
+	router := smapi.SupermarketRouter()
 	log.Fatal(http.ListenAndServe(":8081", router))
 }

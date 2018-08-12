@@ -1,7 +1,7 @@
-package supermarket_api
+package smapi
 
 import (
-	"SupermarketChallange/supermarket_service"
+	"SupermarketChallenge/smservice"
 	"net/http"
 )
 
@@ -22,7 +22,7 @@ var routes = Routes{
 		"Index",
 		"GET",
 		"/",
-		supermarket_service.Index,
+		smservice.Index,
 	},
 
 	//Get the list of all produce currently available
@@ -30,7 +30,7 @@ var routes = Routes{
 		"Fetch",
 		"GET",
 		"/fetch",
-		supermarket_service.FetchProduceList,
+		smservice.FetchProduceList,
 	},
 
 	//Get the list of all produce currently available
@@ -38,7 +38,7 @@ var routes = Routes{
 		"GetOne",
 		"GET",
 		"/get/{code}",
-		supermarket_service.GetOne,
+		smservice.GetOne,
 	},
 
 	//Get the stored logs
@@ -46,7 +46,7 @@ var routes = Routes{
 		"GetLogs",
 		"GET",
 		"/logs",
-		supermarket_service.GetLogs,
+		smservice.GetLogs,
 	},
 
 	//Add a produce Item
@@ -54,7 +54,7 @@ var routes = Routes{
 		"Add",
 		"POST",
 		"/add",
-		supermarket_service.AddProduceItem,
+		smservice.AddProduceItem,
 	},
 
 	//Remove A produce Item
@@ -62,13 +62,13 @@ var routes = Routes{
 		"Remove",
 		"DELETE",
 		"/remove/{code}",
-		supermarket_service.RemoveProduceItem,
+		smservice.RemoveProduceItem,
 	},
 	//Purge the log
 	Route{
 		"CleanLogs",
 		"DELETE",
 		"/purgeLogs",
-		supermarket_service.CleanLogs,
+		smservice.CleanLogs,
 	},
 }

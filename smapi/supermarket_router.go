@@ -1,4 +1,4 @@
-package supermarket_api
+package smapi
 
 import (
 	"github.com/gorilla/mux"
