@@ -13,8 +13,8 @@ import (
 	"os"
 )
 
-const(
-	BODYSIZELIMT = 1048576		// max payload size for posts
+const (
+	BODYSIZELIMT = 1048576 // max payload size for posts
 )
 
 //Get Mapping	"/"
@@ -48,7 +48,7 @@ func FetchProduceList(w http.ResponseWriter, r *http.Request) {
 	c := make(chan []smdb.ProduceItem)                                 //make for the list of produce items
 	go smdb.ListProduceItems(c)                                        //populate the channel of the items
 	db := <-c                                                          //get the items in the channel
-	w.WriteHeader(http.StatusAccepted)                                                 //set the response code
+	w.WriteHeader(http.StatusAccepted)                                 //set the response code
 	w.Header().Set("Content-Type", "application/json ; charset=UTF-8") //Set the response type
 	json.NewEncoder(w).Encode(db)                                      //return the list
 }
@@ -60,7 +60,7 @@ func GetLogs(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, err)
 	}
-	str := string(b)     // convert content to a 'string'
+	str := string(b)                                                   // convert content to a 'string'
 	w.Header().Set("Content-Type", "application/json ; charset=UTF-8") //Set the response type
 	w.WriteHeader(http.StatusAccepted)
 	fmt.Fprintln(w, str) // print the content as a 'string'
@@ -71,35 +71,34 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 	//fmt.Fprintf(w, "Add, %q", html.EscapeString(r.URL.Path))
 	var produce smdb.ProduceItem // Declare a produce Item to to unmarshal into
 
-	//w.Header().Set("Content-Type", "application/json ; charset=UTF-8") //Set the response type
-	w.WriteHeader(http.StatusInternalServerError)                          //Set the response Code
-
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, BODYSIZELIMT)) // Read the body of the request and limit the body size to 1MB
 	if err != nil {
-		fmt.Fprintln(w,err)
+		w.WriteHeader(http.StatusInternalServerError) //Set the response Code
+		fmt.Fprintln(w, err)
 	}
-	if json.Unmarshal(body, &produce); err != nil { //Unmarshal the request into the struct, panic if an error occurs
-
+	if json.Unmarshal(body, &produce); err != nil { //Unmarshal the request into the struct, return error if it occurs
 		if err := json.NewEncoder(w).Encode(err); err != nil {
-			fmt.Fprintln(w,err)
+			w.WriteHeader(http.StatusInternalServerError) //Set the response Code
+			fmt.Fprintln(w, err)
 		}
 	}
 
-	if isValid, errs := smdb.ValidateProduceItem(produce); err == nil && isValid {
-		if e := smdb.AddProduceItemToDatabase(produce); e == nil {
-			w.WriteHeader(http.StatusAccepted)		//Set the response Code
+	if isValid, errs := smdb.ValidateProduceItem(produce); err == nil && isValid {		//validate the produce items if they are valid attempt to add them
+		if e := smdb.AddProduceItemToDatabase(produce); e == nil { //if we are able to add the item then set a successful response and return a success message
+			w.WriteHeader(http.StatusAccepted)                                 //Set the response Code
 			w.Header().Set("Content-Type", "application/json ; charset=UTF-8") //Set the response type
 			fmt.Fprint(w, "Success")
-		} else {
+		} else { //else the produce item already exists, return the error from adding
+			w.WriteHeader(http.StatusBadRequest)
 			fmt.Fprint(w, e)
 		}
-	} else {
+	} else { //else produce code is invalid for some reason, return the reasons why the item is invalid
 		var errorString string
 		for _, err := range errs {
 			errorString += err.Error() + "\n"
 		}
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprint(w, "Produce Item is invalid for the following reasons \n\n", errorString)
+		fmt.Fprintf(w, "Produce Item is invalid for the following reasons \n%s", errorString)
 	}
 }
 
