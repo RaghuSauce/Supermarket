@@ -46,7 +46,6 @@ func GetOne(w http.ResponseWriter, r *http.Request) {
 //Get Mapping  "/fetch "
 func FetchProduceList(w http.ResponseWriter, r *http.Request) {
 	c := make(chan []smdb.ProduceItem)                                 //make for the list of produce items
-	defer close(c)
 	go smdb.ListProduceItems(c)                                        //populate the channel of the items
 	db := <-c                                                          //get the items in the channel
 	w.WriteHeader(http.StatusAccepted)                                                 //set the response code
