@@ -10,6 +10,8 @@
 		gets a string for the name of the project and the running version of the api
 	-GET 	/fetch
     	gets the current list of the produce held within the database
+    -GET    /get/{code}
+        gets the code being requested
     -POST 	/add
     	atempts to add a produce item from the database
         - example request method
