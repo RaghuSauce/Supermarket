@@ -1,4 +1,4 @@
-# SUPERMARKET API CHALLENGE
+    # SUPERMARKET API CHALLENGE
 
 #### About
 
@@ -12,6 +12,8 @@
     	gets the current list of the produce held within the database
     -GET    /get/{code}
         gets the code being requested
+    -GET    /logs
+        gets the logs of requsts sent to the api, persists through shutdown
     -POST 	/add
     	atempts to add a produce item from the database
         - example request method
@@ -20,11 +22,12 @@
 			"name": "romaine lettuce",
 			"unitprice": "4.00"
 		}
-
-    -DELETE	/remove/{code}
+    
+    -DELETE     /remove/{code}
     	- Example url
     		/remove/A12T-4GH7-QPL9-3N4M
-
+    -DELETE     /purgeLogs
+        deletes all logs stored on the database
 
 #### Preqisites
 
