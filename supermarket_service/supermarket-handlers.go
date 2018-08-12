@@ -1,7 +1,7 @@
 package supermarket_service
 
 import (
-	"SupermarketAPI/supermarket_database"
+	"SupermarketChallange/supermarket_database"
 	"encoding/json"
 	"fmt"
 	"io"

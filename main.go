@@ -1,7 +1,7 @@
 package main
 
 import (
-	"SupermarketAPI/supermarket_api"
+	"SupermarketChallange/supermarket_api"
 	"log"
 	"net/http"
 )

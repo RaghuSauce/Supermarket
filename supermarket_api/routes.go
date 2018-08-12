@@ -1,7 +1,7 @@
 package supermarket_api
 
 import (
-	"SupermarketAPI/supermarket_service"
+	"SupermarketChallange/supermarket_service"
 	"net/http"
 )
 

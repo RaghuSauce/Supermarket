@@ -10,7 +10,6 @@ import (
 var database = []ProduceItem{}
 
 //init function to set the starting state of the database
-
 func init() {
 	ResetDB()
 }
