@@ -36,7 +36,7 @@ func GetProduceItem(produceCode string) (bool, ProduceItem) {
 		}
 	}()
 	wg.Wait()
-	return itemExists,item
+	return itemExists, item
 }
 
 //All produce items are assumed that they will enter via the api, thus validation will occur at the api layer
