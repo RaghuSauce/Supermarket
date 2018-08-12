@@ -20,6 +20,7 @@ const (
 	UNITPRICEREGEX   = "^[0-9]+(\\.[0-9]{1,2})?$"
 )
 
+//check to see if two sets of produce items are equal
 func AreEqual(a []ProduceItem, b []ProduceItem) bool {
 	// if the slices are the same size
 	areEqual := false
@@ -31,6 +32,7 @@ func AreEqual(a []ProduceItem, b []ProduceItem) bool {
 	}
 	return areEqual
 }
+// Check to see if two produce items are equal
 func IsEqual(a ProduceItem, b ProduceItem) bool {
 	return (strings.ToUpper(a.ProduceCode) == strings.ToUpper(b.ProduceCode)) &&
 		(strings.ToUpper(a.Name) == strings.ToUpper(b.Name)) &&
@@ -47,20 +49,19 @@ var (
 func ValidateProduceItem(item ProduceItem) (bool, []error) {
 
 	var isValidProduceItem bool //bool to represent if the produce Item is valid
-	//var errString string
+
 	r, _ := regexp.Compile(PRODUCECODEREGEX)              // compile The Produce Code Regex
 	isValidProduceCode := r.MatchString(item.ProduceCode) //determine if produce code is valid
 
 	r, _ = regexp.Compile(NAMEREGEX)
-	isValidName := r.MatchString(item.Name) //determine if the produce code and name are valid
+	isValidName := r.MatchString(item.Name) //determine if the produce name is valid
 
 	r, _ = regexp.Compile(UNITPRICEREGEX)
-	//unitPriceString := strconv.FormatFloat(item.UnitPrice, 'f', 32, 64)       //convert the float to string with enough precision
-	//fmt.Println(unitPriceString)
-	isValidPrice := r.MatchString(item.UnitPrice) //determine if the price, name and produce code are valid
+	isValidPrice := r.MatchString(item.UnitPrice) //determine if the produce price is valid
 
-	isValidProduceItem = isValidName && isValidPrice && isValidProduceCode
+	isValidProduceItem = isValidName && isValidPrice && isValidProduceCode	//set bool if produce is valid
 
+	// fill array based on errors returned
 	var errs []error
 	if !isValidProduceItem {
 		if !isValidProduceCode {

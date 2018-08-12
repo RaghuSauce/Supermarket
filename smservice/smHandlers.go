@@ -63,8 +63,7 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 	//fmt.Fprintf(w, "Add, %q", html.EscapeString(r.URL.Path))
 	var produce smdb.ProduceItem // Declare a produce Item to to unmarshal into
 
-	body, err := ioutil.ReadAll(
-		io.LimitReader(r.Body, 1048576)) // Read the body of the request and limit the body size to 1MB
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576)) // Read the body of the request and limit the body size to 1MB
 	if err != nil {
 		panic(err)
 	}
@@ -91,11 +90,11 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 		}
 		w.WriteHeader(500)
 		fmt.Fprint(w, "Produce Item is invalid for the following reasons \n\n", errorString)
-		//fmt.Fprint(w, err)
 	}
 }
 
 //Delete Mapping	"/remove"
+//Attempt to remove an item from the database
 func RemoveProduceItem(w http.ResponseWriter, r *http.Request) {
 	produceCode := getProduceCodeUrlParameter(r)
 	if err := smdb.RemoveProduceItemFromDatabase(produceCode); err != nil {
@@ -119,6 +118,7 @@ func CleanLogs(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//func to get package name from url
 func getProduceCodeUrlParameter(r *http.Request) string {
 	vars := mux.Vars(r) //Get url variables
 	code := strings.Split(vars["code"], "=")
