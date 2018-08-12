@@ -54,8 +54,9 @@ pipeline {
                 }
 
                 dir('src/SupermarketChallenge') {
-                    script{versionNum = readFile('VERSION')
-                           version = sh( [script:"${versionNum}"] )
+                    script {
+                        versionNum = readFile('VERSION')
+                        version = sh([script: "${versionNum}"+= "|" += "${gitHash}"])
                     }
                     sh 'docker build -t raghusauce011/supermarketchallenge:latest .'
                     sh "docker tag raghusauce011/supermarketchallenge:latest raghusauce011/supermarketchallenge:${version}"
