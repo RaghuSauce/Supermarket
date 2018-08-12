@@ -63,7 +63,7 @@ pipeline {
         stage('Integration Test') {
             steps {
                 sh 'docker run --name supermarket_api --rm -d -p 8081:8081 raghusauce011/supermarketchallenge:latest'
-                sh 'go test smservice/handlers_integration_test.go -integration'
+                sh 'go test smservice/smHandlers_integration_test.go'
                 sh 'docker stop supermarket_api'
             }
 
