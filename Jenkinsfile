@@ -48,13 +48,13 @@ pipeline {
 
         stage('Build docker image') {
             steps {
-            dir('src/SupermarketChallenge') {version = readFile(VERSION)}
-                    script {
-                        gitHash = sh([script: "git show -s --format=%h", returnStdout: true]).trim()
-                        echo "GitHash:${gitHash}"
-                    }
+                script {
+                    gitHash = sh([script: "git show -s --format=%h", returnStdout: true]).trim()
+                    echo "GitHash:${gitHash}"
+                }
 
                 dir('src/SupermarketChallenge') {
+                    version = readFile(VERSION)
                     sh 'docker build -t raghusauce011/supermarketchallenge:latest .'
                     sh "docker tag raghusauce011/supermarketchallenge:latest raghusauce011/supermarketchallenge:${gitHash}"
                 }
@@ -70,7 +70,7 @@ pipeline {
             }
 
         }
-       stage('Publish to Dockerhub') {
+        stage('Publish to Dockerhub') {
             steps {
                 withDockerRegistry([credentialsId: "DockerHubLogin", url: ""]) {
                     sh 'docker push raghusauce011/supermarketchallenge:latest'
@@ -79,15 +79,15 @@ pipeline {
 
             }
         }
-        stage('Deploy to GKE'){
-            steps{
+        stage('Deploy to GKE') {
+            steps {
                 sh "echo ${gitHash}"
                 sh "kubectl set image deployment/supermarket-api-deployment supermarket-api-deployment=raghusauce011/supermarketchallenge:${gitHash}"
             }
         }
     }
 
-    
+
 
     post {
         // only triggered when blue or green sign
