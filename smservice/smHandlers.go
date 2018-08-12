@@ -98,7 +98,7 @@ func AddProduceItem(w http.ResponseWriter, r *http.Request) {
 			errorString += err.Error() + "\n"
 		}
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Produce Item is invalid for the following reasons \n%s", errorString)
+		fmt.Fprintf(w, "Produce Item is invalid for the following reasons\n%s", errorString)
 	}
 }
 

@@ -84,7 +84,7 @@ func RemoveProduceItemFromDatabase(produceCode string) error {
 			database = newDatabase //set db equal to new db
 			err = nil              // bc remove operation was a success set the error to nil
 		} else { //else produce code does not exist within the db
-			err = errors.New("Error Removing Produce Item from the Database") //set error message for return
+			err = errors.New("Item with given code does not exit") //set error message for return
 		}
 	}()
 
