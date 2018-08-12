@@ -71,8 +71,8 @@ pipeline {
        stage('Publish to Dockerhub') {
             steps {
                 withDockerRegistry([credentialsId: "DockerHubLogin", url: ""]) {
-                    sh 'docker push raghusauce011/supermarketchallange:latest'
-                    sh "docker push raghusauce011/supermarketchallange:${gitHash}"
+                    sh 'docker push raghusauce011/supermarketchallenge:latest'
+                    sh "docker push raghusauce011/supermarketchallenge:${gitHash}"
                 }
 
             }
@@ -80,7 +80,7 @@ pipeline {
         stage('Deploy to GKE'){
             steps{
                 sh "echo ${gitHash}"
-                sh " kubectl set image deployment/supermarket-api-deployment supermarket-api-deployment=raghusauce011/supermarketchallange:${gitHash}"
+                sh "kubectl set image deployment/supermarket-api-deployment supermarket-api-deployment=raghusauce011/supermarketchallenge:${gitHash}"
             }
         }
     }
